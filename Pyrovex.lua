@@ -3,13 +3,12 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local Workspace = game:GetService("Workspace")
-
 local LocalPlayer = Players.LocalPlayer
+
 local TargetParent = (gethui and gethui()) or LocalPlayer:WaitForChild("PlayerGui")
 
-local Existing = TargetParent:FindFirstChild("NexusShaderV5Canvas")
-if Existing then
-    Existing:Destroy()
+if TargetParent:FindFirstChild("NexusShaderV5Canvas") then
+    TargetParent.NexusShaderV5Canvas:Destroy()
 end
 
 local function clearEffects()
@@ -22,110 +21,99 @@ end
 
 local function applyDaytime()
     clearEffects()
-    Lighting.ClockTime = 14
+    Lighting.ClockTime = 14.0
     Lighting.Brightness = 3.5
     Lighting.Ambient = Color3.fromRGB(130, 130, 140)
     Lighting.OutdoorAmbient = Color3.fromRGB(220, 220, 230)
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.2
 
-    local cc = Instance.new("ColorCorrectionEffect")
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
     cc.Contrast = 0.15
     cc.Saturation = 0.25
-    cc.Parent = Lighting
 
-    local bloom = Instance.new("BloomEffect")
+    local bloom = Instance.new("BloomEffect", Lighting)
     bloom.Intensity = 0.5
     bloom.Size = 20
-    bloom.Parent = Lighting
 end
 
 local function applySunset()
     clearEffects()
     Lighting.ClockTime = 17.45
-    Lighting.Brightness = 4
+    Lighting.Brightness = 4.0
     Lighting.GlobalShadows = true
-    Lighting.ShadowSoftness = 0
-    Lighting.EnvironmentDiffuseScale = 1
-    Lighting.EnvironmentSpecularScale = 1
+    Lighting.ShadowSoftness = 0.0
+    Lighting.EnvironmentDiffuseScale = 1.0
+    Lighting.EnvironmentSpecularScale = 1.0
     Lighting.Ambient = Color3.fromRGB(45, 30, 40)
     Lighting.OutdoorAmbient = Color3.fromRGB(110, 65, 55)
 
-    local cc = Instance.new("ColorCorrectionEffect")
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
     cc.Contrast = 0.35
     cc.Saturation = 0.55
     cc.TintColor = Color3.fromRGB(255, 155, 90)
-    cc.Parent = Lighting
 
-    local bloom = Instance.new("BloomEffect")
+    local bloom = Instance.new("BloomEffect", Lighting)
     bloom.Intensity = 1.2
     bloom.Size = 35
     bloom.Threshold = 0.5
-    bloom.Parent = Lighting
 
-    local rays = Instance.new("SunRaysEffect")
+    local rays = Instance.new("SunRaysEffect", Lighting)
     rays.Intensity = 0.35
     rays.Spread = 0.8
-    rays.Parent = Lighting
 
-    local atm = Instance.new("Atmosphere")
+    local atm = Instance.new("Atmosphere", Lighting)
     atm.Density = 0.35
     atm.Color = Color3.fromRGB(255, 100, 40)
     atm.Glare = 1.8
-    atm.Haze = 2
-    atm.Parent = Lighting
+    atm.Haze = 2.0
 end
 
 local function applyNight()
     clearEffects()
-    Lighting.ClockTime = 0
+    Lighting.ClockTime = 0.0
     Lighting.Brightness = 1.8
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.2
     Lighting.EnvironmentDiffuseScale = 0.8
-    Lighting.EnvironmentSpecularScale = 1
+    Lighting.EnvironmentSpecularScale = 1.0
     Lighting.Ambient = Color3.fromRGB(15, 15, 30)
     Lighting.OutdoorAmbient = Color3.fromRGB(30, 30, 50)
 
-    local cc = Instance.new("ColorCorrectionEffect")
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
     cc.Contrast = 0.35
     cc.Saturation = 0.4
     cc.TintColor = Color3.fromRGB(175, 185, 255)
-    cc.Parent = Lighting
 
-    local bloom = Instance.new("BloomEffect")
+    local bloom = Instance.new("BloomEffect", Lighting)
     bloom.Intensity = 1.5
     bloom.Size = 40
     bloom.Threshold = 0.25
-    bloom.Parent = Lighting
 
-    local atm = Instance.new("Atmosphere")
+    local atm = Instance.new("Atmosphere", Lighting)
     atm.Density = 0.4
     atm.Color = Color3.fromRGB(10, 10, 25)
     atm.Haze = 1.5
-    atm.Parent = Lighting
 end
 
 local function applyCloudy()
     clearEffects()
-    Lighting.ClockTime = 12
+    Lighting.ClockTime = 12.0
     Lighting.Brightness = 1.5
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.9
     Lighting.Ambient = Color3.fromRGB(100, 105, 115)
     Lighting.OutdoorAmbient = Color3.fromRGB(130, 135, 145)
 
-    local cc = Instance.new("ColorCorrectionEffect")
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
     cc.Contrast = 0.1
     cc.Saturation = -0.15
     cc.TintColor = Color3.fromRGB(210, 215, 225)
-    cc.Parent = Lighting
 
-    local atm = Instance.new("Atmosphere")
+    local atm = Instance.new("Atmosphere", Lighting)
     atm.Density = 0.55
     atm.Color = Color3.fromRGB(180, 185, 195)
-    atm.Haze = 3
-    atm.Parent = Lighting
+    atm.Haze = 3.0
 end
 
 local function applyShore()
@@ -133,8 +121,8 @@ local function applyShore()
     Lighting.ClockTime = 16.8
     Lighting.Brightness = 4.5
     Lighting.GlobalShadows = true
-    Lighting.EnvironmentDiffuseScale = 1
-    Lighting.EnvironmentSpecularScale = 1
+    Lighting.EnvironmentDiffuseScale = 1.0
+    Lighting.EnvironmentSpecularScale = 1.0
     Lighting.Ambient = Color3.fromRGB(50, 40, 50)
     Lighting.OutdoorAmbient = Color3.fromRGB(130, 85, 65)
 
@@ -148,21 +136,18 @@ local function applyShore()
         end
     end)
 
-    local cc = Instance.new("ColorCorrectionEffect")
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
     cc.Contrast = 0.4
     cc.Saturation = 0.65
     cc.TintColor = Color3.fromRGB(255, 160, 95)
-    cc.Parent = Lighting
 
-    local bloom = Instance.new("BloomEffect")
+    local bloom = Instance.new("BloomEffect", Lighting)
     bloom.Intensity = 1.3
     bloom.Size = 35
-    bloom.Parent = Lighting
 
-    local rays = Instance.new("SunRaysEffect")
+    local rays = Instance.new("SunRaysEffect", Lighting)
     rays.Intensity = 0.45
     rays.Spread = 0.85
-    rays.Parent = Lighting
 end
 
 local function applyCinematic()
@@ -171,38 +156,32 @@ local function applyCinematic()
     Lighting.Brightness = 3.8
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.1
-    Lighting.EnvironmentDiffuseScale = 1
-    Lighting.EnvironmentSpecularScale = 1
+    Lighting.EnvironmentDiffuseScale = 1.0
+    Lighting.EnvironmentSpecularScale = 1.0
     Lighting.Ambient = Color3.fromRGB(35, 35, 45)
     Lighting.OutdoorAmbient = Color3.fromRGB(115, 100, 90)
 
-    local cc = Instance.new("ColorCorrectionEffect")
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
     cc.Brightness = 0.03
     cc.Contrast = 0.42
     cc.Saturation = 0.48
     cc.TintColor = Color3.fromRGB(255, 235, 205)
-    cc.Parent = Lighting
 
-    local bloom = Instance.new("BloomEffect")
+    local bloom = Instance.new("BloomEffect", Lighting)
     bloom.Intensity = 1.1
     bloom.Size = 32
     bloom.Threshold = 0.45
-    bloom.Parent = Lighting
 
-    local rays = Instance.new("SunRaysEffect")
+    local rays = Instance.new("SunRaysEffect", Lighting)
     rays.Intensity = 0.3
     rays.Spread = 0.8
-    rays.Parent = Lighting
 
-    local dof = Instance.new("DepthOfFieldEffect")
+    local dof = Instance.new("DepthOfFieldEffect", Lighting)
     dof.FarIntensity = 0.65
     dof.FocusDistance = 25
     dof.InFocusRadius = 45
-    dof.NearIntensity = 0
-    dof.Parent = Lighting
+    dof.NearIntensity = 0.0
 end
-
--- GUI
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "NexusShaderV5Canvas"
@@ -239,10 +218,8 @@ FrameStroke.Transparency = 0.35
 FrameStroke.Thickness = 1
 FrameStroke.Parent = MainFrame
 
--- PR LOGO
-
 local NLogoBox = Instance.new("Frame")
-NLogoBox.Name = "PRLogoBox"
+NLogoBox.Name = "NLogoBox"
 NLogoBox.Parent = MainFrame
 NLogoBox.BackgroundColor3 = Color3.fromRGB(55, 20, 70)
 NLogoBox.BackgroundTransparency = 0.12
@@ -269,14 +246,14 @@ NLogoGradient.Rotation = 45
 NLogoGradient.Parent = NLogoBox
 
 local NLogo = Instance.new("TextLabel")
-NLogo.Name = "PR"
+NLogo.Name = "N"
 NLogo.Parent = NLogoBox
 NLogo.BackgroundTransparency = 1
 NLogo.Size = UDim2.new(1, 0, 1, 0)
 NLogo.Font = Enum.Font.GothamBlack
-NLogo.Text = "PR"
+NLogo.Text = "N"
 NLogo.TextColor3 = Color3.fromRGB(255, 220, 100)
-NLogo.TextSize = 15
+NLogo.TextSize = 19
 NLogo.TextXAlignment = Enum.TextXAlignment.Center
 NLogo.TextYAlignment = Enum.TextYAlignment.Center
 NLogo.ZIndex = 11
@@ -287,8 +264,6 @@ LogoTextStroke.Transparency = 0.5
 LogoTextStroke.Thickness = 0.6
 LogoTextStroke.Parent = NLogo
 
--- TITLE
-
 local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Name = "TitleLabel"
 TitleLabel.Parent = MainFrame
@@ -296,7 +271,7 @@ TitleLabel.BackgroundTransparency = 1
 TitleLabel.Position = UDim2.new(0, 53, 0, 10)
 TitleLabel.Size = UDim2.new(1, -95, 0, 25)
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "PYROVEX HUB"
+TitleLabel.Text = "Nexus Shader V5"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleLabel.TextSize = 16
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -308,13 +283,11 @@ SubtitleLabel.BackgroundTransparency = 1
 SubtitleLabel.Position = UDim2.new(0, 54, 0, 31)
 SubtitleLabel.Size = UDim2.new(1, -95, 0, 17)
 SubtitleLabel.Font = Enum.Font.GothamMedium
-SubtitleLabel.Text = "Shader Interface"
+SubtitleLabel.Text = "By Kingflame/Pyro Vex Hub"
 SubtitleLabel.TextColor3 = Color3.fromRGB(225, 205, 235)
 SubtitleLabel.TextSize = 8
 SubtitleLabel.TextTransparency = 0.05
 SubtitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-
--- CLOSE BUTTON
 
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Name = "Close"
@@ -362,8 +335,6 @@ HeaderGradient.Color = ColorSequence.new(
 )
 HeaderGradient.Parent = HeaderLine
 
--- SCROLLING SHADER LIST
-
 local ScrollFrame = Instance.new("ScrollingFrame")
 ScrollFrame.Name = "ShaderList"
 ScrollFrame.Parent = MainFrame
@@ -389,17 +360,8 @@ local ButtonNormal = Color3.fromRGB(42, 28, 55)
 local ButtonHover = Color3.fromRGB(65, 35, 78)
 local ButtonPressed = Color3.fromRGB(82, 35, 88)
 
-local ButtonTween = TweenInfo.new(
-    0.18,
-    Enum.EasingStyle.Quint,
-    Enum.EasingDirection.Out
-)
-
-local PressTween = TweenInfo.new(
-    0.10,
-    Enum.EasingStyle.Quad,
-    Enum.EasingDirection.Out
-)
+local ButtonTween = TweenInfo.new(0.18, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local PressTween = TweenInfo.new(0.10, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
 local function createMenuButton(text, order, callback)
     local btn = Instance.new("TextButton")
@@ -500,16 +462,13 @@ createMenuButton("Cloudy", 4, applyCloudy)
 createMenuButton("Shore", 5, applyShore)
 createMenuButton("Cinematic", 6, applyCinematic)
 
--- DRAGGING: HEADER ONLY, SO BUTTONS REMAIN CLICKABLE
-
 local dragging = false
+local dragInput
 local dragStart
 local startPos
-local dragInput
 
 local function update(input)
     local delta = input.Position - dragStart
-
     MainFrame.Position = UDim2.new(
         startPos.X.Scale,
         startPos.X.Offset + delta.X,
@@ -530,7 +489,6 @@ DragHandle.ZIndex = 2
 DragHandle.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
-
         dragging = true
         dragStart = input.Position
         startPos = MainFrame.Position
@@ -556,8 +514,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- CLOSE WITH ANIMATION
-
 local closing = false
 
 CloseBtn.Activated:Connect(function()
@@ -567,11 +523,7 @@ CloseBtn.Activated:Connect(function()
 
     closing = true
 
-    local fadeInfo = TweenInfo.new(
-        0.28,
-        Enum.EasingStyle.Quint,
-        Enum.EasingDirection.In
-    )
+    local fadeInfo = TweenInfo.new(0.28, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 
     TweenService:Create(MainFrame, fadeInfo, {
         BackgroundTransparency = 1,
@@ -597,8 +549,6 @@ CloseBtn.Activated:Connect(function()
     end
 end)
 
--- OPENING ANIMATION
-
 MainFrame.Size = UDim2.new(0, 220, 0, 270)
 MainFrame.BackgroundTransparency = 1
 
@@ -610,22 +560,20 @@ for _, obj in pairs(MainFrame:GetDescendants()) do
     end
 end
 
-TweenService:Create(MainFrame, TweenInfo.new(
-    0.45,
-    Enum.EasingStyle.Quint,
-    Enum.EasingDirection.Out
-), {
+local openTween = TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+
+TweenService:Create(MainFrame, openTween, {
     Size = UDim2.new(0, 250, 0, 305),
     BackgroundTransparency = 0.08
 }):Play()
 
 for _, obj in pairs(MainFrame:GetDescendants()) do
     if obj:IsA("TextLabel") or obj:IsA("TextButton") then
-        TweenService:Create(obj, TweenInfo.new(0.35), {
+        TweenService:Create(obj, TweenInfo.new(0.35, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
             TextTransparency = 0
         }):Play()
     elseif obj:IsA("UIStroke") then
-        TweenService:Create(obj, TweenInfo.new(0.4), {
+        TweenService:Create(obj, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
             Transparency = 0.35
         }):Play()
     end
