@@ -7,8 +7,8 @@ local LocalPlayer = Players.LocalPlayer
 
 local TargetParent = (gethui and gethui()) or LocalPlayer:WaitForChild("PlayerGui")
 
-if TargetParent:FindFirstChild("NexusShaderV5Canvas") then
-    TargetParent.NexusShaderV5Canvas:Destroy()
+if TargetParent:FindFirstChild("PyrovexShaderV6Canvas") then
+    TargetParent.PyrovexShaderV6Canvas:Destroy()
 end
 
 local function clearEffects()
@@ -183,8 +183,24 @@ local function applyCinematic()
     dof.NearIntensity = 0.0
 end
 
+-- UI PALETTE: charcoal, graphite, muted red, deep purple
+local C = {
+    Background = Color3.fromRGB(17, 17, 23),
+    Top = Color3.fromRGB(29, 25, 34),
+    Bottom = Color3.fromRGB(30, 19, 27),
+    Graphite = Color3.fromRGB(38, 38, 47),
+    GraphiteLight = Color3.fromRGB(53, 48, 59),
+    Red = Color3.fromRGB(151, 52, 69),
+    RedLight = Color3.fromRGB(205, 75, 95),
+    Purple = Color3.fromRGB(113, 77, 155),
+    PurpleLight = Color3.fromRGB(166, 113, 207),
+    White = Color3.fromRGB(244, 240, 248),
+    Muted = Color3.fromRGB(164, 155, 174),
+    Black = Color3.fromRGB(12, 12, 17),
+}
+
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "NexusShaderV5Canvas"
+ScreenGui.Name = "PyrovexShaderV6Canvas"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = TargetParent
@@ -192,12 +208,14 @@ ScreenGui.Parent = TargetParent
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-MainFrame.BackgroundTransparency = 0.08
+MainFrame.BackgroundColor3 = C.Background
+MainFrame.BackgroundTransparency = 0.04
+MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0.08, 0, 0.15, 0)
-MainFrame.Size = UDim2.new(0, 250, 0, 305)
+MainFrame.Size = UDim2.new(0, 270, 0, 350)
 MainFrame.Active = true
 MainFrame.ClipsDescendants = true
+MainFrame.ZIndex = 2
 
 local MainCorner = Instance.new("UICorner")
 MainCorner.CornerRadius = UDim.new(0, 16)
@@ -205,163 +223,209 @@ MainCorner.Parent = MainFrame
 
 local FrameGradient = Instance.new("UIGradient")
 FrameGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(105, 20, 145)),
-    ColorSequenceKeypoint.new(0.48, Color3.fromRGB(48, 12, 72)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(175, 15, 45))
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 31, 43)),
+    ColorSequenceKeypoint.new(0.48, Color3.fromRGB(20, 20, 27)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(43, 24, 32))
 })
-FrameGradient.Rotation = 45
+FrameGradient.Rotation = 125
 FrameGradient.Parent = MainFrame
 
 local FrameStroke = Instance.new("UIStroke")
-FrameStroke.Color = Color3.fromRGB(190, 70, 255)
-FrameStroke.Transparency = 0.35
-FrameStroke.Thickness = 1
+FrameStroke.Color = C.Purple
+FrameStroke.Transparency = 0.28
+FrameStroke.Thickness = 1.3
 FrameStroke.Parent = MainFrame
 
-local NLogoBox = Instance.new("Frame")
-NLogoBox.Name = "NLogoBox"
-NLogoBox.Parent = MainFrame
-NLogoBox.BackgroundColor3 = Color3.fromRGB(55, 20, 70)
-NLogoBox.BackgroundTransparency = 0.12
-NLogoBox.Position = UDim2.new(0, 15, 0, 11)
-NLogoBox.Size = UDim2.new(0, 31, 0, 31)
-NLogoBox.ZIndex = 10
+local OuterGlow = Instance.new("Frame")
+OuterGlow.Name = "AccentEdge"
+OuterGlow.Parent = MainFrame
+OuterGlow.BackgroundColor3 = C.Red
+OuterGlow.BackgroundTransparency = 0.08
+OuterGlow.BorderSizePixel = 0
+OuterGlow.Position = UDim2.new(0, 0, 0, 0)
+OuterGlow.Size = UDim2.new(1, 0, 0, 3)
+OuterGlow.ZIndex = 8
 
-local NLogoCorner = Instance.new("UICorner")
-NLogoCorner.CornerRadius = UDim.new(0, 9)
-NLogoCorner.Parent = NLogoBox
+local OuterGlowGradient = Instance.new("UIGradient")
+OuterGlowGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, C.Purple),
+    ColorSequenceKeypoint.new(0.5, C.RedLight),
+    ColorSequenceKeypoint.new(1, C.PurpleLight)
+})
+OuterGlowGradient.Parent = OuterGlow
 
-local NLogoStroke = Instance.new("UIStroke")
-NLogoStroke.Color = Color3.fromRGB(220, 95, 255)
-NLogoStroke.Transparency = 0.05
-NLogoStroke.Thickness = 1.2
-NLogoStroke.Parent = NLogoBox
+local PLogoBox = Instance.new("Frame")
+PLogoBox.Name = "PLogoBox"
+PLogoBox.Parent = MainFrame
+PLogoBox.BackgroundColor3 = C.Graphite
+PLogoBox.BackgroundTransparency = 0.05
+PLogoBox.Position = UDim2.new(0, 16, 0, 15)
+PLogoBox.Size = UDim2.new(0, 35, 0, 35)
+PLogoBox.ZIndex = 10
 
-local NLogoGradient = Instance.new("UIGradient")
-NLogoGradient.Color = ColorSequence.new(
-    Color3.fromRGB(105, 35, 145),
-    Color3.fromRGB(180, 25, 55)
-)
-NLogoGradient.Rotation = 45
-NLogoGradient.Parent = NLogoBox
+local PLogoCorner = Instance.new("UICorner")
+PLogoCorner.CornerRadius = UDim.new(0, 10)
+PLogoCorner.Parent = PLogoBox
 
-local NLogo = Instance.new("TextLabel")
-NLogo.Name = "N"
-NLogo.Parent = NLogoBox
-NLogo.BackgroundTransparency = 1
-NLogo.Size = UDim2.new(1, 0, 1, 0)
-NLogo.Font = Enum.Font.GothamBlack
-NLogo.Text = "N"
-NLogo.TextColor3 = Color3.fromRGB(255, 220, 100)
-NLogo.TextSize = 19
-NLogo.TextXAlignment = Enum.TextXAlignment.Center
-NLogo.TextYAlignment = Enum.TextYAlignment.Center
-NLogo.ZIndex = 11
+local PLogoStroke = Instance.new("UIStroke")
+PLogoStroke.Color = C.PurpleLight
+PLogoStroke.Transparency = 0.12
+PLogoStroke.Thickness = 1.2
+PLogoStroke.Parent = PLogoBox
+
+local PLogoGradient = Instance.new("UIGradient")
+PLogoGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(77, 53, 103)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(107, 39, 54))
+})
+PLogoGradient.Rotation = 45
+PLogoGradient.Parent = PLogoBox
+
+local PLogo = Instance.new("TextLabel")
+PLogo.Name = "P"
+PLogo.Parent = PLogoBox
+PLogo.BackgroundTransparency = 1
+PLogo.Size = UDim2.new(1, 0, 1, 0)
+PLogo.Font = Enum.Font.GothamBlack
+PLogo.Text = "P"
+PLogo.TextColor3 = Color3.fromRGB(255, 224, 232)
+PLogo.TextSize = 21
+PLogo.TextXAlignment = Enum.TextXAlignment.Center
+PLogo.TextYAlignment = Enum.TextYAlignment.Center
+PLogo.ZIndex = 11
 
 local LogoTextStroke = Instance.new("UIStroke")
-LogoTextStroke.Color = Color3.fromRGB(255, 150, 50)
-LogoTextStroke.Transparency = 0.5
+LogoTextStroke.Color = C.RedLight
+LogoTextStroke.Transparency = 0.65
 LogoTextStroke.Thickness = 0.6
-LogoTextStroke.Parent = NLogo
+LogoTextStroke.Parent = PLogo
 
 local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Name = "TitleLabel"
 TitleLabel.Parent = MainFrame
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Position = UDim2.new(0, 53, 0, 10)
-TitleLabel.Size = UDim2.new(1, -95, 0, 25)
+TitleLabel.Position = UDim2.new(0, 61, 0, 13)
+TitleLabel.Size = UDim2.new(1, -112, 0, 25)
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "Nexus Shader V5"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 16
+TitleLabel.Text = "PYROVEX HUB SHADER V6"
+TitleLabel.TextColor3 = C.White
+TitleLabel.TextSize = 12
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+TitleLabel.ZIndex = 10
 
 local SubtitleLabel = Instance.new("TextLabel")
 SubtitleLabel.Name = "Subtitle"
 SubtitleLabel.Parent = MainFrame
 SubtitleLabel.BackgroundTransparency = 1
-SubtitleLabel.Position = UDim2.new(0, 54, 0, 31)
-SubtitleLabel.Size = UDim2.new(1, -95, 0, 17)
+SubtitleLabel.Position = UDim2.new(0, 62, 0, 36)
+SubtitleLabel.Size = UDim2.new(1, -112, 0, 15)
 SubtitleLabel.Font = Enum.Font.GothamMedium
 SubtitleLabel.Text = "By Kingflame/Pyro Vex Hub"
-SubtitleLabel.TextColor3 = Color3.fromRGB(225, 205, 235)
+SubtitleLabel.TextColor3 = C.Muted
 SubtitleLabel.TextSize = 8
-SubtitleLabel.TextTransparency = 0.05
 SubtitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+SubtitleLabel.ZIndex = 10
 
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Name = "Close"
 CloseBtn.Parent = MainFrame
-CloseBtn.BackgroundColor3 = Color3.fromRGB(180, 25, 45)
-CloseBtn.BackgroundTransparency = 0.05
-CloseBtn.Position = UDim2.new(1, -34, 0, 13)
-CloseBtn.Size = UDim2.new(0, 22, 0, 22)
-CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.BackgroundColor3 = C.Graphite
+CloseBtn.BackgroundTransparency = 0
+CloseBtn.Position = UDim2.new(1, -39, 0, 18)
+CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+CloseBtn.Font = Enum.Font.GothamMedium
 CloseBtn.Text = "×"
-CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseBtn.TextSize = 15
+CloseBtn.TextColor3 = C.White
+CloseBtn.TextSize = 20
 CloseBtn.AutoButtonColor = false
 CloseBtn.ZIndex = 20
 
 local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 7)
+CloseCorner.CornerRadius = UDim.new(0, 8)
 CloseCorner.Parent = CloseBtn
 
 local CloseGradient = Instance.new("UIGradient")
-CloseGradient.Color = ColorSequence.new(
-    Color3.fromRGB(235, 50, 65),
-    Color3.fromRGB(125, 15, 30)
-)
+CloseGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(119, 47, 64)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(67, 35, 55))
+})
 CloseGradient.Rotation = 90
 CloseGradient.Parent = CloseBtn
 
 local CloseStroke = Instance.new("UIStroke")
-CloseStroke.Color = Color3.fromRGB(255, 100, 120)
-CloseStroke.Transparency = 0.35
+CloseStroke.Color = C.RedLight
+CloseStroke.Transparency = 0.4
+CloseStroke.Thickness = 1
 CloseStroke.Parent = CloseBtn
 
 local HeaderLine = Instance.new("Frame")
+HeaderLine.Name = "HeaderLine"
 HeaderLine.Parent = MainFrame
-HeaderLine.BackgroundColor3 = Color3.fromRGB(220, 80, 255)
-HeaderLine.BackgroundTransparency = 0.35
+HeaderLine.BackgroundColor3 = C.Red
+HeaderLine.BackgroundTransparency = 0.1
 HeaderLine.BorderSizePixel = 0
-HeaderLine.Position = UDim2.new(0, 15, 0, 51)
-HeaderLine.Size = UDim2.new(1, -30, 0, 1)
+HeaderLine.Position = UDim2.new(0, 16, 0, 62)
+HeaderLine.Size = UDim2.new(1, -32, 0, 1)
+HeaderLine.ZIndex = 6
 
 local HeaderGradient = Instance.new("UIGradient")
-HeaderGradient.Color = ColorSequence.new(
-    Color3.fromRGB(150, 50, 255),
-    Color3.fromRGB(255, 50, 80)
-)
+HeaderGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, C.Purple),
+    ColorSequenceKeypoint.new(0.5, C.Red),
+    ColorSequenceKeypoint.new(1, C.Purple)
+})
 HeaderGradient.Parent = HeaderLine
+
+local SectionLabel = Instance.new("TextLabel")
+SectionLabel.Name = "SectionLabel"
+SectionLabel.Parent = MainFrame
+SectionLabel.BackgroundTransparency = 1
+SectionLabel.Position = UDim2.new(0, 17, 0, 72)
+SectionLabel.Size = UDim2.new(1, -34, 0, 17)
+SectionLabel.Font = Enum.Font.GothamBold
+SectionLabel.Text = "LIGHTING PRESETS"
+SectionLabel.TextColor3 = C.Muted
+SectionLabel.TextSize = 9
+SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
+SectionLabel.ZIndex = 5
 
 local ScrollFrame = Instance.new("ScrollingFrame")
 ScrollFrame.Name = "ShaderList"
 ScrollFrame.Parent = MainFrame
 ScrollFrame.BackgroundTransparency = 1
 ScrollFrame.BorderSizePixel = 0
-ScrollFrame.Position = UDim2.new(0, 12, 0, 62)
-ScrollFrame.Size = UDim2.new(1, -24, 1, -73)
+ScrollFrame.Position = UDim2.new(0, 14, 0, 96)
+ScrollFrame.Size = UDim2.new(1, -28, 1, -108)
 ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 ScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 ScrollFrame.ScrollBarThickness = 3
-ScrollFrame.ScrollBarImageColor3 = Color3.fromRGB(215, 170, 255)
+ScrollFrame.ScrollBarImageColor3 = C.PurpleLight
 ScrollFrame.ScrollBarImageTransparency = 0.25
 ScrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 ScrollFrame.Active = true
 ScrollFrame.ZIndex = 4
+
+local ScrollPadding = Instance.new("UIPadding")
+ScrollPadding.PaddingTop = UDim.new(0, 3)
+ScrollPadding.PaddingBottom = UDim.new(0, 5)
+ScrollPadding.PaddingLeft = UDim.new(0, 2)
+ScrollPadding.PaddingRight = UDim.new(0, 2)
+ScrollPadding.Parent = ScrollFrame
 
 local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = ScrollFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 8)
 
-local ButtonNormal = Color3.fromRGB(42, 28, 55)
-local ButtonHover = Color3.fromRGB(65, 35, 78)
-local ButtonPressed = Color3.fromRGB(82, 35, 88)
+local ButtonNormal = Color3.fromRGB(34, 33, 42)
+local ButtonHover = Color3.fromRGB(55, 43, 61)
+local ButtonPressed = Color3.fromRGB(75, 39, 56)
 
-local ButtonTween = TweenInfo.new(0.18, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local ButtonTween = TweenInfo.new(0.22, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 local PressTween = TweenInfo.new(0.10, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+local SelectedButton
+local ButtonRecords = {}
 
 local function createMenuButton(text, order, callback)
     local btn = Instance.new("TextButton")
@@ -369,87 +433,182 @@ local function createMenuButton(text, order, callback)
     btn.Parent = ScrollFrame
     btn.BackgroundColor3 = ButtonNormal
     btn.BackgroundTransparency = 0.02
-    btn.Size = UDim2.new(1, 0, 0, 44)
-    btn.Font = Enum.Font.GothamMedium
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 13
+    btn.BorderSizePixel = 0
+    btn.Size = UDim2.new(1, -4, 0, 45)
+    btn.Font = Enum.Font.GothamSemibold
+    btn.Text = ""
     btn.LayoutOrder = order
     btn.AutoButtonColor = false
+    btn.ClipsDescendants = true
     btn.ZIndex = 5
 
     local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 11)
+    btnCorner.CornerRadius = UDim.new(0, 10)
     btnCorner.Parent = btn
 
     local stroke = Instance.new("UIStroke")
-    stroke.Color = Color3.fromRGB(190, 55, 90)
-    stroke.Transparency = 0.15
+    stroke.Color = Color3.fromRGB(75, 65, 82)
+    stroke.Transparency = 0.25
     stroke.Thickness = 1
     stroke.Parent = btn
 
     local buttonGradient = Instance.new("UIGradient")
     buttonGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(55, 30, 72)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(42, 28, 58)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(65, 24, 48))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(44, 41, 53)),
+        ColorSequenceKeypoint.new(0.55, Color3.fromRGB(33, 32, 41)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(49, 32, 40))
     })
-    buttonGradient.Rotation = 20
+    buttonGradient.Rotation = 15
     buttonGradient.Parent = btn
 
+    local accent = Instance.new("Frame")
+    accent.Name = "Accent"
+    accent.Parent = btn
+    accent.BackgroundColor3 = C.PurpleLight
+    accent.BorderSizePixel = 0
+    accent.Position = UDim2.new(0, 0, 0.2, 0)
+    accent.Size = UDim2.new(0, 3, 0.6, 0)
+    accent.BackgroundTransparency = 0.08
+    accent.ZIndex = 7
+
+    local accentCorner = Instance.new("UICorner")
+    accentCorner.CornerRadius = UDim.new(1, 0)
+    accentCorner.Parent = accent
+
+    local label = Instance.new("TextLabel")
+    label.Name = "ButtonLabel"
+    label.Parent = btn
+    label.BackgroundTransparency = 1
+    label.Position = UDim2.new(0, 15, 0, 0)
+    label.Size = UDim2.new(1, -53, 1, 0)
+    label.Font = Enum.Font.GothamSemibold
+    label.Text = text
+    label.TextColor3 = C.White
+    label.TextSize = 13
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.ZIndex = 7
+
+    local arrow = Instance.new("TextLabel")
+    arrow.Name = "Arrow"
+    arrow.Parent = btn
+    arrow.BackgroundTransparency = 1
+    arrow.Position = UDim2.new(1, -32, 0, 0)
+    arrow.Size = UDim2.new(0, 20, 1, 0)
+    arrow.Font = Enum.Font.GothamMedium
+    arrow.Text = "›"
+    arrow.TextColor3 = C.Muted
+    arrow.TextSize = 23
+    arrow.ZIndex = 7
+
     local originalSize = btn.Size
+    local isHovered = false
+
+    ButtonRecords[#ButtonRecords + 1] = {
+        Button = btn,
+        Stroke = stroke,
+        Accent = accent,
+        Label = label,
+        Arrow = arrow,
+    }
 
     btn.MouseEnter:Connect(function()
+        isHovered = true
+
         TweenService:Create(btn, ButtonTween, {
-            BackgroundColor3 = ButtonHover
+            BackgroundColor3 = ButtonHover,
         }):Play()
 
         TweenService:Create(stroke, ButtonTween, {
-            Color = Color3.fromRGB(220, 85, 255),
-            Transparency = 0
+            Color = C.PurpleLight,
+            Transparency = 0.05,
+        }):Play()
+
+        TweenService:Create(accent, ButtonTween, {
+            BackgroundColor3 = C.RedLight,
+            Size = UDim2.new(0, 4, 0.76, 0),
+            Position = UDim2.new(0, 0, 0.12, 0),
+        }):Play()
+
+        TweenService:Create(arrow, ButtonTween, {
+            TextColor3 = C.RedLight,
+            Position = UDim2.new(1, -27, 0, 0),
         }):Play()
     end)
 
     btn.MouseLeave:Connect(function()
+        isHovered = false
+
         TweenService:Create(btn, ButtonTween, {
-            BackgroundColor3 = ButtonNormal,
-            Size = originalSize
+            BackgroundColor3 = SelectedButton == btn and ButtonPressed or ButtonNormal,
+            Size = originalSize,
         }):Play()
 
         TweenService:Create(stroke, ButtonTween, {
-            Color = Color3.fromRGB(190, 55, 90),
-            Transparency = 0.15
+            Color = SelectedButton == btn and C.RedLight or Color3.fromRGB(75, 65, 82),
+            Transparency = SelectedButton == btn and 0.05 or 0.25,
+        }):Play()
+
+        TweenService:Create(accent, ButtonTween, {
+            BackgroundColor3 = SelectedButton == btn and C.RedLight or C.PurpleLight,
+            Size = UDim2.new(0, 3, 0.6, 0),
+            Position = UDim2.new(0, 0, 0.2, 0),
+        }):Play()
+
+        TweenService:Create(arrow, ButtonTween, {
+            TextColor3 = C.Muted,
+            Position = UDim2.new(1, -32, 0, 0),
         }):Play()
     end)
 
     btn.MouseButton1Down:Connect(function()
         TweenService:Create(btn, PressTween, {
             BackgroundColor3 = ButtonPressed,
-            Size = UDim2.new(1, -4, 0, 42)
+            Size = UDim2.new(1, -8, 0, 43),
         }):Play()
     end)
 
     btn.MouseButton1Up:Connect(function()
         TweenService:Create(btn, PressTween, {
-            BackgroundColor3 = ButtonHover,
-            Size = originalSize
+            BackgroundColor3 = isHovered and ButtonHover or ButtonNormal,
+            Size = originalSize,
         }):Play()
     end)
 
     btn.Activated:Connect(function()
         callback()
 
-        TweenService:Create(stroke, TweenInfo.new(0.25), {
-            Color = Color3.fromRGB(255, 100, 130)
+        if SelectedButton and SelectedButton.Parent then
+            for _, record in ipairs(ButtonRecords) do
+                if record.Button == SelectedButton then
+                    TweenService:Create(record.Stroke, ButtonTween, {
+                        Color = Color3.fromRGB(75, 65, 82),
+                        Transparency = 0.25,
+                    }):Play()
+                    TweenService:Create(record.Accent, ButtonTween, {
+                        BackgroundColor3 = C.PurpleLight,
+                    }):Play()
+                end
+            end
+        end
+
+        SelectedButton = btn
+
+        TweenService:Create(btn, ButtonTween, {
+            BackgroundColor3 = ButtonPressed,
         }):Play()
 
-        task.delay(0.25, function()
-            if stroke.Parent then
-                TweenService:Create(stroke, TweenInfo.new(0.3), {
-                    Color = Color3.fromRGB(190, 55, 90)
-                }):Play()
-            end
-        end)
+        TweenService:Create(stroke, ButtonTween, {
+            Color = C.RedLight,
+            Transparency = 0.05,
+        }):Play()
+
+        TweenService:Create(accent, ButtonTween, {
+            BackgroundColor3 = C.RedLight,
+        }):Play()
+
+        TweenService:Create(arrow, ButtonTween, {
+            TextColor3 = C.RedLight,
+        }):Play()
     end)
 
     return btn
@@ -462,6 +621,7 @@ createMenuButton("Cloudy", 4, applyCloudy)
 createMenuButton("Shore", 5, applyShore)
 createMenuButton("Cinematic", 6, applyCinematic)
 
+-- Dragging
 local dragging = false
 local dragInput
 local dragStart
@@ -472,7 +632,7 @@ local function update(input)
     MainFrame.Position = UDim2.new(
         startPos.X.Scale,
         startPos.X.Offset + delta.X,
-        startPos.Y.Scale,
+                startPos.Y.Scale,
         startPos.Y.Offset + delta.Y
     )
 end
@@ -481,14 +641,15 @@ local DragHandle = Instance.new("Frame")
 DragHandle.Name = "DragHandle"
 DragHandle.Parent = MainFrame
 DragHandle.BackgroundTransparency = 1
-DragHandle.Position = UDim2.new(0, 50, 0, 0)
-DragHandle.Size = UDim2.new(1, -100, 0, 50)
+DragHandle.Position = UDim2.new(0, 55, 0, 0)
+DragHandle.Size = UDim2.new(1, -105, 0, 60)
 DragHandle.Active = true
-DragHandle.ZIndex = 2
+DragHandle.ZIndex = 12
 
 DragHandle.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
+
         dragging = true
         dragStart = input.Position
         startPos = MainFrame.Position
@@ -514,7 +675,30 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
+-- Close animation
 local closing = false
+
+CloseBtn.MouseEnter:Connect(function()
+    TweenService:Create(CloseBtn, ButtonTween, {
+        BackgroundColor3 = C.Red,
+    }):Play()
+
+    TweenService:Create(CloseStroke, ButtonTween, {
+        Color = C.RedLight,
+        Transparency = 0.05,
+    }):Play()
+end)
+
+CloseBtn.MouseLeave:Connect(function()
+    TweenService:Create(CloseBtn, ButtonTween, {
+        BackgroundColor3 = C.Graphite,
+    }):Play()
+
+    TweenService:Create(CloseStroke, ButtonTween, {
+        Color = C.RedLight,
+        Transparency = 0.4,
+    }):Play()
+end)
 
 CloseBtn.Activated:Connect(function()
     if closing then
@@ -523,58 +707,170 @@ CloseBtn.Activated:Connect(function()
 
     closing = true
 
-    local fadeInfo = TweenInfo.new(0.28, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+    local fadeInfo = TweenInfo.new(
+        0.28,
+        Enum.EasingStyle.Quint,
+        Enum.EasingDirection.In
+    )
 
     TweenService:Create(MainFrame, fadeInfo, {
         BackgroundTransparency = 1,
-        Size = UDim2.new(0, 230, 0, 285)
+        Size = UDim2.new(0, 245, 0, 315),
+        Position = MainFrame.Position + UDim2.new(0, 0, 0, 12),
     }):Play()
 
-    for _, obj in pairs(MainFrame:GetDescendants()) do
+    TweenService:Create(FrameStroke, fadeInfo, {
+        Transparency = 1,
+    }):Play()
+
+    for _, obj in ipairs(MainFrame:GetDescendants()) do
         if obj:IsA("TextLabel") or obj:IsA("TextButton") then
             TweenService:Create(obj, fadeInfo, {
-                TextTransparency = 1
+                TextTransparency = 1,
+                BackgroundTransparency = 1,
             }):Play()
         elseif obj:IsA("UIStroke") then
             TweenService:Create(obj, fadeInfo, {
-                Transparency = 1
+                Transparency = 1,
+            }):Play()
+        elseif obj:IsA("Frame") and obj ~= DragHandle then
+            TweenService:Create(obj, fadeInfo, {
+                BackgroundTransparency = 1,
             }):Play()
         end
     end
 
-    task.wait(0.3)
+    task.wait(0.31)
 
-    if ScreenGui then
+    if ScreenGui.Parent then
         ScreenGui:Destroy()
     end
 end)
 
-MainFrame.Size = UDim2.new(0, 220, 0, 270)
+-- Opening animation
+MainFrame.Size = UDim2.new(0, 235, 0, 305)
+MainFrame.Position = UDim2.new(0.08, 0, 0.15, 14)
 MainFrame.BackgroundTransparency = 1
+FrameStroke.Transparency = 1
 
-for _, obj in pairs(MainFrame:GetDescendants()) do
+for _, obj in ipairs(MainFrame:GetDescendants()) do
     if obj:IsA("TextLabel") or obj:IsA("TextButton") then
         obj.TextTransparency = 1
     elseif obj:IsA("UIStroke") then
         obj.Transparency = 1
+    elseif obj:IsA("Frame") and obj ~= DragHandle then
+        if obj ~= MainFrame then
+            obj.BackgroundTransparency = 1
+        end
     end
 end
 
-local openTween = TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+local openTween = TweenInfo.new(
+    0.48,
+    Enum.EasingStyle.Back,
+    Enum.EasingDirection.Out
+)
 
 TweenService:Create(MainFrame, openTween, {
-    Size = UDim2.new(0, 250, 0, 305),
-    BackgroundTransparency = 0.08
+    Size = UDim2.new(0, 270, 0, 350),
+    Position = UDim2.new(0.08, 0, 0.15, 0),
+    BackgroundTransparency = 0.04,
 }):Play()
 
-for _, obj in pairs(MainFrame:GetDescendants()) do
+TweenService:Create(FrameStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+    Transparency = 0.28,
+}):Play()
+
+for _, obj in ipairs(MainFrame:GetDescendants()) do
     if obj:IsA("TextLabel") or obj:IsA("TextButton") then
-        TweenService:Create(obj, TweenInfo.new(0.35, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-            TextTransparency = 0
-        }):Play()
+        TweenService:Create(
+            obj,
+            TweenInfo.new(0.36, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+            {TextTransparency = 0}
+        ):Play()
+
     elseif obj:IsA("UIStroke") then
-        TweenService:Create(obj, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-            Transparency = 0.35
-        }):Play()
+        local targetTransparency = 0.25
+
+        if obj == PLogoStroke then
+            targetTransparency = 0.12
+        elseif obj == LogoTextStroke then
+            targetTransparency = 0.65
+        elseif obj == CloseStroke then
+            targetTransparency = 0.4
+        elseif obj.Parent and obj.Parent:IsA("TextButton") then
+            targetTransparency = 0.25
+        end
+
+        TweenService:Create(
+            obj,
+            TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+            {Transparency = targetTransparency}
+        ):Play()
+
+    elseif obj:IsA("Frame") and obj ~= MainFrame and obj ~= DragHandle then
+        local targetTransparency = 0
+
+        if obj == HeaderLine or obj == OuterGlow then
+            targetTransparency = 0.1
+        end
+
+        TweenService:Create(
+            obj,
+            TweenInfo.new(0.38, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+            {BackgroundTransparency = targetTransparency}
+        ):Play()
     end
 end
+
+-- Animated red-purple accent
+task.spawn(function()
+    while ScreenGui.Parent and not closing do
+        local gradientTween = TweenService:Create(
+            OuterGlowGradient,
+            TweenInfo.new(3.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+            {Rotation = 180}
+        )
+
+        gradientTween:Play()
+        gradientTween.Completed:Wait()
+
+        if not ScreenGui.Parent or closing then
+            break
+        end
+
+        local reverseTween = TweenService:Create(
+            OuterGlowGradient,
+            TweenInfo.new(3.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+            {Rotation = 360}
+        )
+
+        reverseTween:Play()
+        reverseTween.Completed:Wait()
+    end
+end)
+
+-- Subtle logo pulse
+task.spawn(function()
+    while ScreenGui.Parent and not closing do
+        TweenService:Create(
+            PLogoStroke,
+            TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+            {Transparency = 0.35}
+        ):Play()
+
+        task.wait(1.1)
+
+        if not ScreenGui.Parent or closing then
+            break
+        end
+
+        TweenService:Create(
+            PLogoStroke,
+            TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+            {Transparency = 0.12}
+        ):Play()
+
+        task.wait(1.1)
+    end
+end)
