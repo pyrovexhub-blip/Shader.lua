@@ -3,13 +3,17 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
 
+local LocalPlayer = Players.LocalPlayer
 local TargetParent = (gethui and gethui()) or LocalPlayer:WaitForChild("PlayerGui")
 
-if TargetParent:FindFirstChild("PyrovexShaderV6Canvas") then
-    TargetParent.PyrovexShaderV6Canvas:Destroy()
+if TargetParent:FindFirstChild("PyrovexShaderV2Canvas") then
+    TargetParent.PyrovexShaderV2Canvas:Destroy()
 end
+
+--==================================================
+-- LIGHTING FUNCTIONS
+--==================================================
 
 local function clearEffects()
     for _, v in pairs(Lighting:GetChildren()) do
@@ -21,7 +25,7 @@ end
 
 local function applyDaytime()
     clearEffects()
-    Lighting.ClockTime = 14.0
+    Lighting.ClockTime = 14
     Lighting.Brightness = 3.5
     Lighting.Ambient = Color3.fromRGB(130, 130, 140)
     Lighting.OutdoorAmbient = Color3.fromRGB(220, 220, 230)
@@ -40,11 +44,11 @@ end
 local function applySunset()
     clearEffects()
     Lighting.ClockTime = 17.45
-    Lighting.Brightness = 4.0
+    Lighting.Brightness = 4
     Lighting.GlobalShadows = true
-    Lighting.ShadowSoftness = 0.0
-    Lighting.EnvironmentDiffuseScale = 1.0
-    Lighting.EnvironmentSpecularScale = 1.0
+    Lighting.ShadowSoftness = 0
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
     Lighting.Ambient = Color3.fromRGB(45, 30, 40)
     Lighting.OutdoorAmbient = Color3.fromRGB(110, 65, 55)
 
@@ -66,17 +70,17 @@ local function applySunset()
     atm.Density = 0.35
     atm.Color = Color3.fromRGB(255, 100, 40)
     atm.Glare = 1.8
-    atm.Haze = 2.0
+    atm.Haze = 2
 end
 
 local function applyNight()
     clearEffects()
-    Lighting.ClockTime = 0.0
+    Lighting.ClockTime = 0
     Lighting.Brightness = 1.8
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.2
     Lighting.EnvironmentDiffuseScale = 0.8
-    Lighting.EnvironmentSpecularScale = 1.0
+    Lighting.EnvironmentSpecularScale = 1
     Lighting.Ambient = Color3.fromRGB(15, 15, 30)
     Lighting.OutdoorAmbient = Color3.fromRGB(30, 30, 50)
 
@@ -98,7 +102,7 @@ end
 
 local function applyCloudy()
     clearEffects()
-    Lighting.ClockTime = 12.0
+    Lighting.ClockTime = 12
     Lighting.Brightness = 1.5
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.9
@@ -113,7 +117,7 @@ local function applyCloudy()
     local atm = Instance.new("Atmosphere", Lighting)
     atm.Density = 0.55
     atm.Color = Color3.fromRGB(180, 185, 195)
-    atm.Haze = 3.0
+    atm.Haze = 3
 end
 
 local function applyShore()
@@ -121,8 +125,8 @@ local function applyShore()
     Lighting.ClockTime = 16.8
     Lighting.Brightness = 4.5
     Lighting.GlobalShadows = true
-    Lighting.EnvironmentDiffuseScale = 1.0
-    Lighting.EnvironmentSpecularScale = 1.0
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
     Lighting.Ambient = Color3.fromRGB(50, 40, 50)
     Lighting.OutdoorAmbient = Color3.fromRGB(130, 85, 65)
 
@@ -156,8 +160,8 @@ local function applyCinematic()
     Lighting.Brightness = 3.8
     Lighting.GlobalShadows = true
     Lighting.ShadowSoftness = 0.1
-    Lighting.EnvironmentDiffuseScale = 1.0
-    Lighting.EnvironmentSpecularScale = 1.0
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
     Lighting.Ambient = Color3.fromRGB(35, 35, 45)
     Lighting.OutdoorAmbient = Color3.fromRGB(115, 100, 90)
 
@@ -180,251 +184,376 @@ local function applyCinematic()
     dof.FarIntensity = 0.65
     dof.FocusDistance = 25
     dof.InFocusRadius = 45
-    dof.NearIntensity = 0.0
+    dof.NearIntensity = 0
 end
 
--- UI PALETTE: charcoal, graphite, muted red, deep purple
+--==================================================
+-- CRIMSON UI THEME
+--==================================================
+
 local C = {
-    Background = Color3.fromRGB(17, 17, 23),
-    Top = Color3.fromRGB(29, 25, 34),
-    Bottom = Color3.fromRGB(30, 19, 27),
-    Graphite = Color3.fromRGB(38, 38, 47),
-    GraphiteLight = Color3.fromRGB(53, 48, 59),
-    Red = Color3.fromRGB(151, 52, 69),
-    RedLight = Color3.fromRGB(205, 75, 95),
-    Purple = Color3.fromRGB(113, 77, 155),
-    PurpleLight = Color3.fromRGB(166, 113, 207),
-    White = Color3.fromRGB(244, 240, 248),
-    Muted = Color3.fromRGB(164, 155, 174),
-    Black = Color3.fromRGB(12, 12, 17),
+    Background = Color3.fromRGB(13, 10, 15),
+    Surface = Color3.fromRGB(23, 17, 24),
+    SurfaceLight = Color3.fromRGB(34, 23, 32),
+    SurfaceHover = Color3.fromRGB(49, 25, 38),
+
+    Crimson = Color3.fromRGB(155, 25, 55),
+    CrimsonLight = Color3.fromRGB(205, 38, 75),
+    CrimsonBright = Color3.fromRGB(255, 65, 100),
+    CrimsonDark = Color3.fromRGB(90, 13, 34),
+
+    White = Color3.fromRGB(250, 240, 245),
+    Muted = Color3.fromRGB(155, 137, 148),
+    Dim = Color3.fromRGB(95, 77, 88),
+
+    Black = Color3.fromRGB(8, 7, 11),
+    Green = Color3.fromRGB(105, 220, 155),
 }
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "PyrovexShaderV6Canvas"
+ScreenGui.Name = "PyrovexShaderV2Canvas"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.IgnoreGuiInset = true
 ScreenGui.Parent = TargetParent
+
+--==================================================
+-- UI HELPERS
+--==================================================
+
+local function Corner(parent, radius)
+    local obj = Instance.new("UICorner")
+    obj.CornerRadius = UDim.new(0, radius)
+    obj.Parent = parent
+    return obj
+end
+
+local function Stroke(parent, color, thickness, transparency)
+    local obj = Instance.new("UIStroke")
+    obj.Color = color
+    obj.Thickness = thickness
+    obj.Transparency = transparency or 0
+    obj.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    obj.Parent = parent
+    return obj
+end
+
+local function Gradient(parent, colors, rotation)
+    local obj = Instance.new("UIGradient")
+    obj.Color = ColorSequence.new(colors)
+    obj.Rotation = rotation or 0
+    obj.Parent = parent
+    return obj
+end
+
+local function NewTween(object, duration, properties, style, direction)
+    local tween = TweenService:Create(
+        object,
+        TweenInfo.new(
+            duration,
+            style or Enum.EasingStyle.Quint,
+            direction or Enum.EasingDirection.Out
+        ),
+        properties
+    )
+
+    tween:Play()
+    return tween
+end
+
+local function CreateLabel(parent, name, text, position, size, font, textSize, color)
+    local label = Instance.new("TextLabel")
+    label.Name = name
+    label.Parent = parent
+    label.BackgroundTransparency = 1
+    label.Position = position
+    label.Size = size
+    label.Font = font
+    label.Text = text
+    label.TextSize = textSize
+    label.TextColor3 = color
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.TextYAlignment = Enum.TextYAlignment.Center
+    label.ZIndex = 10
+    return label
+end
+
+--==================================================
+-- MAIN WINDOW
+--==================================================
 
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = C.Background
-MainFrame.BackgroundTransparency = 0.04
+MainFrame.BackgroundTransparency = 0
 MainFrame.BorderSizePixel = 0
-MainFrame.Position = UDim2.new(0.08, 0, 0.15, 0)
-MainFrame.Size = UDim2.new(0, 270, 0, 350)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.Size = UDim2.new(0, 280, 0, 390)
 MainFrame.Active = true
 MainFrame.ClipsDescendants = true
 MainFrame.ZIndex = 2
 
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 16)
-MainCorner.Parent = MainFrame
+local MainScale = Instance.new("UIScale")
+MainScale.Scale = 0.9
+MainScale.Parent = MainFrame
 
-local FrameGradient = Instance.new("UIGradient")
-FrameGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 31, 43)),
-    ColorSequenceKeypoint.new(0.48, Color3.fromRGB(20, 20, 27)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(43, 24, 32))
-})
-FrameGradient.Rotation = 125
-FrameGradient.Parent = MainFrame
+Corner(MainFrame, 17)
 
-local FrameStroke = Instance.new("UIStroke")
-FrameStroke.Color = C.Purple
-FrameStroke.Transparency = 0.28
-FrameStroke.Thickness = 1.3
-FrameStroke.Parent = MainFrame
+Gradient(MainFrame, {
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 17, 29)),
+    ColorSequenceKeypoint.new(0.45, Color3.fromRGB(17, 13, 21)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(31, 11, 20)),
+}, 135)
 
-local OuterGlow = Instance.new("Frame")
-OuterGlow.Name = "AccentEdge"
-OuterGlow.Parent = MainFrame
-OuterGlow.BackgroundColor3 = C.Red
-OuterGlow.BackgroundTransparency = 0.08
-OuterGlow.BorderSizePixel = 0
-OuterGlow.Position = UDim2.new(0, 0, 0, 0)
-OuterGlow.Size = UDim2.new(1, 0, 0, 3)
-OuterGlow.ZIndex = 8
+Stroke(MainFrame, C.CrimsonLight, 1.4, 0.2)
 
-local OuterGlowGradient = Instance.new("UIGradient")
-OuterGlowGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, C.Purple),
-    ColorSequenceKeypoint.new(0.5, C.RedLight),
-    ColorSequenceKeypoint.new(1, C.PurpleLight)
-})
-OuterGlowGradient.Parent = OuterGlow
+--==================================================
+-- OUTER GLOW
+--==================================================
 
-local PLogoBox = Instance.new("Frame")
-PLogoBox.Name = "PLogoBox"
-PLogoBox.Parent = MainFrame
-PLogoBox.BackgroundColor3 = C.Graphite
-PLogoBox.BackgroundTransparency = 0.05
-PLogoBox.Position = UDim2.new(0, 16, 0, 15)
-PLogoBox.Size = UDim2.new(0, 35, 0, 35)
-PLogoBox.ZIndex = 10
+local Glow = Instance.new("Frame")
+Glow.Name = "Glow"
+Glow.Parent = MainFrame
+Glow.BackgroundColor3 = C.Crimson
+Glow.BorderSizePixel = 0
+Glow.Size = UDim2.new(1, 0, 0, 4)
+Glow.ZIndex = 15
 
-local PLogoCorner = Instance.new("UICorner")
-PLogoCorner.CornerRadius = UDim.new(0, 10)
-PLogoCorner.Parent = PLogoBox
+Gradient(Glow, {
+    ColorSequenceKeypoint.new(0, C.CrimsonDark),
+    ColorSequenceKeypoint.new(0.3, C.CrimsonBright),
+    ColorSequenceKeypoint.new(0.7, C.CrimsonLight),
+    ColorSequenceKeypoint.new(1, C.CrimsonDark),
+}, 0)
 
-local PLogoStroke = Instance.new("UIStroke")
-PLogoStroke.Color = C.PurpleLight
-PLogoStroke.Transparency = 0.12
-PLogoStroke.Thickness = 1.2
-PLogoStroke.Parent = PLogoBox
+local BottomAccent = Instance.new("Frame")
+BottomAccent.Parent = MainFrame
+BottomAccent.BackgroundColor3 = C.Crimson
+BottomAccent.BackgroundTransparency = 0.3
+BottomAccent.BorderSizePixel = 0
+BottomAccent.Position = UDim2.new(0, 18, 1, -3)
+BottomAccent.Size = UDim2.new(1, -36, 0, 1)
+BottomAccent.ZIndex = 8
 
-local PLogoGradient = Instance.new("UIGradient")
-PLogoGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(77, 53, 103)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(107, 39, 54))
-})
-PLogoGradient.Rotation = 45
-PLogoGradient.Parent = PLogoBox
+--==================================================
+-- HEADER
+--==================================================
 
-local PLogo = Instance.new("TextLabel")
-PLogo.Name = "P"
-PLogo.Parent = PLogoBox
-PLogo.BackgroundTransparency = 1
-PLogo.Size = UDim2.new(1, 0, 1, 0)
-PLogo.Font = Enum.Font.GothamBlack
-PLogo.Text = "P"
-PLogo.TextColor3 = Color3.fromRGB(255, 224, 232)
-PLogo.TextSize = 21
-PLogo.TextXAlignment = Enum.TextXAlignment.Center
-PLogo.TextYAlignment = Enum.TextYAlignment.Center
-PLogo.ZIndex = 11
+local LogoBox = Instance.new("Frame")
+LogoBox.Name = "LogoBox"
+LogoBox.Parent = MainFrame
+LogoBox.BackgroundColor3 = C.CrimsonDark
+LogoBox.Position = UDim2.new(0, 17, 0, 17)
+LogoBox.Size = UDim2.new(0, 43, 0, 43)
+LogoBox.ZIndex = 10
 
-local LogoTextStroke = Instance.new("UIStroke")
-LogoTextStroke.Color = C.RedLight
-LogoTextStroke.Transparency = 0.65
-LogoTextStroke.Thickness = 0.6
-LogoTextStroke.Parent = PLogo
+Corner(LogoBox, 12)
+Stroke(LogoBox, C.CrimsonBright, 1.3, 0.2)
 
-local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Name = "TitleLabel"
-TitleLabel.Parent = MainFrame
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Position = UDim2.new(0, 61, 0, 13)
-TitleLabel.Size = UDim2.new(1, -112, 0, 25)
-TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "PYROVEX HUB SHADER V6"
-TitleLabel.TextColor3 = C.White
-TitleLabel.TextSize = 12
-TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-TitleLabel.ZIndex = 10
+Gradient(LogoBox, {
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(130, 23, 52)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 12, 27)),
+}, 45)
 
-local SubtitleLabel = Instance.new("TextLabel")
-SubtitleLabel.Name = "Subtitle"
-SubtitleLabel.Parent = MainFrame
-SubtitleLabel.BackgroundTransparency = 1
-SubtitleLabel.Position = UDim2.new(0, 62, 0, 36)
-SubtitleLabel.Size = UDim2.new(1, -112, 0, 15)
-SubtitleLabel.Font = Enum.Font.GothamMedium
-SubtitleLabel.Text = "By Kingflame/Pyro Vex Hub"
-SubtitleLabel.TextColor3 = C.Muted
-SubtitleLabel.TextSize = 8
-SubtitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-SubtitleLabel.ZIndex = 10
+local Logo = CreateLabel(
+    LogoBox,
+    "Logo",
+    "P",
+    UDim2.new(0, 0, 0, 0),
+    UDim2.new(1, 0, 1, 0),
+    Enum.Font.GothamBlack,
+    27,
+    C.White
+)
+
+Logo.TextXAlignment = Enum.TextXAlignment.Center
+Logo.TextYAlignment = Enum.TextYAlignment.Center
+
+CreateLabel(
+    MainFrame,
+    "Title",
+    "PYROVEX HUB",
+    UDim2.new(0, 70, 0, 17),
+    UDim2.new(1, -125, 0, 23),
+    Enum.Font.GothamBlack,
+    14,
+    C.White
+)
+
+CreateLabel(
+    MainFrame,
+    "Subtitle",
+    "By Kingflame • V2",
+    UDim2.new(0, 71, 0, 40),
+    UDim2.new(1, -125, 0, 17),
+    Enum.Font.GothamMedium,
+    8,
+    C.Muted
+)
 
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Name = "Close"
 CloseBtn.Parent = MainFrame
-CloseBtn.BackgroundColor3 = C.Graphite
-CloseBtn.BackgroundTransparency = 0
-CloseBtn.Position = UDim2.new(1, -39, 0, 18)
-CloseBtn.Size = UDim2.new(0, 25, 0, 25)
-CloseBtn.Font = Enum.Font.GothamMedium
+CloseBtn.BackgroundColor3 = C.SurfaceLight
+CloseBtn.BorderSizePixel = 0
+CloseBtn.Position = UDim2.new(1, -44, 0, 20)
+CloseBtn.Size = UDim2.new(0, 27, 0, 27)
+CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.Text = "×"
 CloseBtn.TextColor3 = C.White
-CloseBtn.TextSize = 20
+CloseBtn.TextSize = 21
 CloseBtn.AutoButtonColor = false
 CloseBtn.ZIndex = 20
 
-local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 8)
-CloseCorner.Parent = CloseBtn
+Corner(CloseBtn, 9)
 
-local CloseGradient = Instance.new("UIGradient")
-CloseGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(119, 47, 64)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(67, 35, 55))
-})
-CloseGradient.Rotation = 90
-CloseGradient.Parent = CloseBtn
+local CloseStroke = Stroke(CloseBtn, C.CrimsonLight, 1, 0.45)
 
-local CloseStroke = Instance.new("UIStroke")
-CloseStroke.Color = C.RedLight
-CloseStroke.Transparency = 0.4
-CloseStroke.Thickness = 1
-CloseStroke.Parent = CloseBtn
+CloseBtn.MouseEnter:Connect(function()
+    NewTween(CloseBtn, 0.2, {
+        BackgroundColor3 = C.CrimsonDark
+    })
 
-local HeaderLine = Instance.new("Frame")
-HeaderLine.Name = "HeaderLine"
-HeaderLine.Parent = MainFrame
-HeaderLine.BackgroundColor3 = C.Red
-HeaderLine.BackgroundTransparency = 0.1
-HeaderLine.BorderSizePixel = 0
-HeaderLine.Position = UDim2.new(0, 16, 0, 62)
-HeaderLine.Size = UDim2.new(1, -32, 0, 1)
-HeaderLine.ZIndex = 6
+    NewTween(CloseStroke, 0.2, {
+        Transparency = 0.05
+    })
+end)
 
-local HeaderGradient = Instance.new("UIGradient")
-HeaderGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, C.Purple),
-    ColorSequenceKeypoint.new(0.5, C.Red),
-    ColorSequenceKeypoint.new(1, C.Purple)
-})
-HeaderGradient.Parent = HeaderLine
+CloseBtn.MouseLeave:Connect(function()
+    NewTween(CloseBtn, 0.2, {
+        BackgroundColor3 = C.SurfaceLight
+    })
 
-local SectionLabel = Instance.new("TextLabel")
-SectionLabel.Name = "SectionLabel"
-SectionLabel.Parent = MainFrame
-SectionLabel.BackgroundTransparency = 1
-SectionLabel.Position = UDim2.new(0, 17, 0, 72)
-SectionLabel.Size = UDim2.new(1, -34, 0, 17)
-SectionLabel.Font = Enum.Font.GothamBold
-SectionLabel.Text = "LIGHTING PRESETS"
-SectionLabel.TextColor3 = C.Muted
-SectionLabel.TextSize = 9
-SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
-SectionLabel.ZIndex = 5
+    NewTween(CloseStroke, 0.2, {
+        Transparency = 0.45
+    })
+end)
+
+--==================================================
+-- HEADER STATUS
+--==================================================
+
+local StatusFrame = Instance.new("Frame")
+StatusFrame.Parent = MainFrame
+StatusFrame.BackgroundColor3 = C.Surface
+StatusFrame.Position = UDim2.new(0, 17, 0, 73)
+StatusFrame.Size = UDim2.new(1, -34, 0, 37)
+StatusFrame.BorderSizePixel = 0
+StatusFrame.ZIndex = 5
+
+Corner(StatusFrame, 9)
+Stroke(StatusFrame, C.CrimsonDark, 1, 0.35)
+
+local StatusDot = Instance.new("Frame")
+StatusDot.Parent = StatusFrame
+StatusDot.BackgroundColor3 = C.Green
+StatusDot.Position = UDim2.new(0, 12, 0.5, -3)
+StatusDot.Size = UDim2.new(0, 6, 0, 6)
+StatusDot.BorderSizePixel = 0
+StatusDot.ZIndex = 7
+
+Corner(StatusDot, 10)
+
+CreateLabel(
+    StatusFrame,
+    "Status",
+    "GRAPHICS SYSTEM ONLINE",
+    UDim2.new(0, 26, 0, 0),
+    UDim2.new(1, -38, 1, 0),
+    Enum.Font.GothamBold,
+    9,
+    C.Muted
+)
+
+CreateLabel(
+    StatusFrame,
+    "Version",
+    "V2",
+    UDim2.new(1, -38, 0, 0),
+    UDim2.new(0, 25, 1, 0),
+    Enum.Font.GothamBlack,
+    9,
+    C.CrimsonBright
+)
+
+--==================================================
+-- SECTION HEADER
+--==================================================
+
+CreateLabel(
+    MainFrame,
+    "SectionLabel",
+    "VISUAL PRESETS",
+    UDim2.new(0, 19, 0, 123),
+    UDim2.new(1, -38, 0, 19),
+    Enum.Font.GothamBlack,
+    10,
+    C.White
+)
+
+CreateLabel(
+    MainFrame,
+    "SectionDescription",
+    "Choose your preferred atmosphere",
+    UDim2.new(0, 19, 0, 143),
+    UDim2.new(1, -38, 0, 15),
+    Enum.Font.GothamMedium,
+    8,
+    C.Muted
+)
+
+local SectionLine = Instance.new("Frame")
+SectionLine.Parent = MainFrame
+SectionLine.BackgroundColor3 = C.Crimson
+SectionLine.BackgroundTransparency = 0.5
+SectionLine.BorderSizePixel = 0
+SectionLine.Position = UDim2.new(0, 19, 0, 164)
+SectionLine.Size = UDim2.new(1, -38, 0, 1)
+SectionLine.ZIndex = 5
+
+--==================================================
+-- SCROLLING AREA
+--==================================================
 
 local ScrollFrame = Instance.new("ScrollingFrame")
 ScrollFrame.Name = "ShaderList"
 ScrollFrame.Parent = MainFrame
 ScrollFrame.BackgroundTransparency = 1
 ScrollFrame.BorderSizePixel = 0
-ScrollFrame.Position = UDim2.new(0, 14, 0, 96)
-ScrollFrame.Size = UDim2.new(1, -28, 1, -108)
+ScrollFrame.Position = UDim2.new(0, 15, 0, 174)
+ScrollFrame.Size = UDim2.new(1, -30, 1, -216)
 ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 ScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 ScrollFrame.ScrollBarThickness = 3
-ScrollFrame.ScrollBarImageColor3 = C.PurpleLight
-ScrollFrame.ScrollBarImageTransparency = 0.25
+ScrollFrame.ScrollBarImageColor3 = C.CrimsonBright
+ScrollFrame.ScrollBarImageTransparency = 0.15
 ScrollFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 ScrollFrame.Active = true
-ScrollFrame.ZIndex = 4
+ScrollFrame.ZIndex = 5
 
 local ScrollPadding = Instance.new("UIPadding")
-ScrollPadding.PaddingTop = UDim.new(0, 3)
-ScrollPadding.PaddingBottom = UDim.new(0, 5)
-ScrollPadding.PaddingLeft = UDim.new(0, 2)
-ScrollPadding.PaddingRight = UDim.new(0, 2)
+ScrollPadding.PaddingTop = UDim.new(0, 4)
+ScrollPadding.PaddingBottom = UDim.new(0, 8)
+ScrollPadding.PaddingLeft = UDim.new(0, 3)
+ScrollPadding.PaddingRight = UDim.new(0, 3)
 ScrollPadding.Parent = ScrollFrame
 
 local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = ScrollFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 8)
+UIListLayout.Padding = UDim.new(0, 9)
 
-local ButtonNormal = Color3.fromRGB(34, 33, 42)
-local ButtonHover = Color3.fromRGB(55, 43, 61)
-local ButtonPressed = Color3.fromRGB(75, 39, 56)
+--==================================================
+-- BUTTON SYSTEM
+--==================================================
 
-local ButtonTween = TweenInfo.new(0.22, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
-local PressTween = TweenInfo.new(0.10, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local ButtonNormal = Color3.fromRGB(29, 21, 29)
+local ButtonHover = Color3.fromRGB(48, 24, 36)
+local ButtonSelected = Color3.fromRGB(72, 23, 42)
 
-local SelectedButton
+local SelectedButton = nil
 local ButtonRecords = {}
 
 local function createMenuButton(text, order, callback)
@@ -432,187 +561,330 @@ local function createMenuButton(text, order, callback)
     btn.Name = text .. "Button"
     btn.Parent = ScrollFrame
     btn.BackgroundColor3 = ButtonNormal
-    btn.BackgroundTransparency = 0.02
+    btn.BackgroundTransparency = 0
     btn.BorderSizePixel = 0
-    btn.Size = UDim2.new(1, -4, 0, 45)
+    btn.Size = UDim2.new(1, -6, 0, 52)
     btn.Font = Enum.Font.GothamSemibold
     btn.Text = ""
     btn.LayoutOrder = order
     btn.AutoButtonColor = false
     btn.ClipsDescendants = true
-    btn.ZIndex = 5
+    btn.ZIndex = 6
 
-    local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 10)
-    btnCorner.Parent = btn
+    Corner(btn, 11)
 
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = Color3.fromRGB(75, 65, 82)
-    stroke.Transparency = 0.25
-    stroke.Thickness = 1
-    stroke.Parent = btn
+    local stroke = Stroke(
+        btn,
+        Color3.fromRGB(76, 48, 62),
+        1,
+        0.35
+    )
 
-    local buttonGradient = Instance.new("UIGradient")
-    buttonGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(44, 41, 53)),
-        ColorSequenceKeypoint.new(0.55, Color3.fromRGB(33, 32, 41)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(49, 32, 40))
-    })
-    buttonGradient.Rotation = 15
-    buttonGradient.Parent = btn
+    local gradient = Gradient(btn, {
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(43, 28, 39)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(29, 21, 30)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(44, 22, 34)),
+    }, 15)
 
     local accent = Instance.new("Frame")
     accent.Name = "Accent"
     accent.Parent = btn
-    accent.BackgroundColor3 = C.PurpleLight
+    accent.BackgroundColor3 = C.Crimson
     accent.BorderSizePixel = 0
     accent.Position = UDim2.new(0, 0, 0.2, 0)
     accent.Size = UDim2.new(0, 3, 0.6, 0)
-    accent.BackgroundTransparency = 0.08
-    accent.ZIndex = 7
+    accent.ZIndex = 8
 
-    local accentCorner = Instance.new("UICorner")
-    accentCorner.CornerRadius = UDim.new(1, 0)
-    accentCorner.Parent = accent
+    Corner(accent, 5)
 
-    local label = Instance.new("TextLabel")
-    label.Name = "ButtonLabel"
-    label.Parent = btn
-    label.BackgroundTransparency = 1
-    label.Position = UDim2.new(0, 15, 0, 0)
-    label.Size = UDim2.new(1, -53, 1, 0)
-    label.Font = Enum.Font.GothamSemibold
-    label.Text = text
-    label.TextColor3 = C.White
-    label.TextSize = 13
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 7
+    local iconBox = Instance.new("Frame")
+    iconBox.Parent = btn
+    iconBox.BackgroundColor3 = C.SurfaceLight
+    iconBox.BorderSizePixel = 0
+    iconBox.Position = UDim2.new(0, 11, 0.5, -15)
+    iconBox.Size = UDim2.new(0, 30, 0, 30)
+    iconBox.ZIndex = 8
 
-    local arrow = Instance.new("TextLabel")
-    arrow.Name = "Arrow"
-    arrow.Parent = btn
-    arrow.BackgroundTransparency = 1
-    arrow.Position = UDim2.new(1, -32, 0, 0)
-    arrow.Size = UDim2.new(0, 20, 1, 0)
-    arrow.Font = Enum.Font.GothamMedium
-    arrow.Text = "›"
-    arrow.TextColor3 = C.Muted
-    arrow.TextSize = 23
-    arrow.ZIndex = 7
+    Corner(iconBox, 9)
 
-    local originalSize = btn.Size
-    local isHovered = false
+    local iconStroke = Stroke(iconBox, C.CrimsonDark, 1, 0.35)
 
-    ButtonRecords[#ButtonRecords + 1] = {
+    local icons = {
+        Daytime = "☀",
+        Sunset = "◉",
+        Night = "🌑",
+        Cloudy = "☁",
+        Shore = "≈",
+        Cinematic = "🎞️",
+    }
+
+    local iconLabel = CreateLabel(
+        iconBox,
+        "Icon",
+        icons[text] or "✦",
+        UDim2.new(0, 0, 0, 0),
+        UDim2.new(1, 0, 1, 0),
+        Enum.Font.GothamBold,
+        18,
+        C.CrimsonBright
+    )
+
+    iconLabel.TextXAlignment = Enum.TextXAlignment.Center
+
+    local descriptions = {
+        Daytime = "Natural daylight atmosphere",
+        Sunset = "Warm crimson sunset tones",
+        Night = "Deep midnight atmosphere",
+        Cloudy = "Soft overcast environment",
+        Shore = "Golden coastal atmosphere",
+        Cinematic = "Enhanced cinematic visuals",
+    }
+
+    local label = CreateLabel(
+        btn,
+        "ButtonLabel",
+        text,
+        UDim2.new(0, 51, 0, 6),
+        UDim2.new(1, -90, 0, 20),
+        Enum.Font.GothamBold,
+        12,
+        C.White
+    )
+
+    local sublabel = CreateLabel(
+        btn,
+        "Description",
+        descriptions[text] or "Visual lighting preset",
+        UDim2.new(0, 51, 0, 27),
+        UDim2.new(1, -90, 0, 15),
+        Enum.Font.GothamMedium,
+        8,
+        C.Muted
+    )
+
+    local arrow = CreateLabel(
+        btn,
+        "Arrow",
+        "›",
+        UDim2.new(1, -29, 0, 0),
+        UDim2.new(0, 19, 1, 0),
+        Enum.Font.GothamMedium,
+        24,
+        C.Dim
+    )
+
+    arrow.TextXAlignment = Enum.TextXAlignment.Center
+
+    local indicator = Instance.new("Frame")
+    indicator.Name = "SelectedIndicator"
+    indicator.Parent = btn
+    indicator.BackgroundColor3 = C.CrimsonBright
+    indicator.BorderSizePixel = 0
+    indicator.AnchorPoint = Vector2.new(1, 0.5)
+    indicator.Position = UDim2.new(1, -14, 0.5, 0)
+    indicator.Size = UDim2.new(0, 5, 0, 5)
+    indicator.BackgroundTransparency = 1
+    indicator.ZIndex = 9
+
+    Corner(indicator, 10)
+
+    local record = {
         Button = btn,
         Stroke = stroke,
         Accent = accent,
         Label = label,
         Arrow = arrow,
+        Icon = iconBox,
+        IconStroke = iconStroke,
+        IconLabel = iconLabel,
+        Indicator = indicator,
+        Gradient = gradient,
     }
 
+    table.insert(ButtonRecords, record)
+
+    local function setSelected(state)
+        if state then
+            NewTween(btn, 0.22, {
+                BackgroundColor3 = ButtonSelected
+            })
+
+            NewTween(stroke, 0.22, {
+                Color = C.CrimsonBright,
+                Transparency = 0.05
+            })
+
+            NewTween(accent, 0.22, {
+                BackgroundColor3 = C.CrimsonBright,
+                Size = UDim2.new(0, 4, 0.75, 0),
+                Position = UDim2.new(0, 0, 0.125, 0)
+            })
+
+            NewTween(iconBox, 0.22, {
+                BackgroundColor3 = C.CrimsonDark
+            })
+
+            NewTween(iconStroke, 0.22, {
+                Color = C.CrimsonBright,
+                Transparency = 0.1
+            })
+
+            NewTween(iconLabel, 0.22, {
+                              TextColor3 = C.White
+            })
+
+            NewTween(label, 0.22, {
+                TextColor3 = C.CrimsonBright
+            })
+
+            NewTween(arrow, 0.22, {
+                TextColor3 = C.CrimsonBright,
+                Position = UDim2.new(1, -25, 0, 0)
+            })
+
+            NewTween(indicator, 0.22, {
+                BackgroundTransparency = 0,
+                Size = UDim2.new(0, 6, 0, 6)
+            })
+        else
+            NewTween(btn, 0.22, {
+                BackgroundColor3 = ButtonNormal
+            })
+
+            NewTween(stroke, 0.22, {
+                Color = Color3.fromRGB(76, 48, 62),
+                Transparency = 0.35
+            })
+
+            NewTween(accent, 0.22, {
+                BackgroundColor3 = C.Crimson,
+                Size = UDim2.new(0, 3, 0.6, 0),
+                Position = UDim2.new(0, 0, 0.2, 0)
+            })
+
+            NewTween(iconBox, 0.22, {
+                BackgroundColor3 = C.SurfaceLight
+            })
+
+            NewTween(iconStroke, 0.22, {
+                Color = C.CrimsonDark,
+                Transparency = 0.35
+            })
+
+            NewTween(iconLabel, 0.22, {
+                TextColor3 = C.CrimsonBright
+            })
+
+            NewTween(label, 0.22, {
+                TextColor3 = C.White
+            })
+
+            NewTween(arrow, 0.22, {
+                TextColor3 = C.Dim,
+                Position = UDim2.new(1, -29, 0, 0)
+            })
+
+            NewTween(indicator, 0.22, {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0, 5, 0, 5)
+            })
+        end
+    end
+
     btn.MouseEnter:Connect(function()
-        isHovered = true
+        if SelectedButton ~= btn then
+            NewTween(btn, 0.18, {
+                BackgroundColor3 = ButtonHover
+            })
 
-        TweenService:Create(btn, ButtonTween, {
-            BackgroundColor3 = ButtonHover,
-        }):Play()
+            NewTween(stroke, 0.18, {
+                Transparency = 0.12
+            })
 
-        TweenService:Create(stroke, ButtonTween, {
-            Color = C.PurpleLight,
-            Transparency = 0.05,
-        }):Play()
-
-        TweenService:Create(accent, ButtonTween, {
-            BackgroundColor3 = C.RedLight,
-            Size = UDim2.new(0, 4, 0.76, 0),
-            Position = UDim2.new(0, 0, 0.12, 0),
-        }):Play()
-
-        TweenService:Create(arrow, ButtonTween, {
-            TextColor3 = C.RedLight,
-            Position = UDim2.new(1, -27, 0, 0),
-        }):Play()
+            NewTween(arrow, 0.18, {
+                TextColor3 = C.CrimsonLight
+            })
+        end
     end)
 
     btn.MouseLeave:Connect(function()
-        isHovered = false
+        if SelectedButton ~= btn then
+            NewTween(btn, 0.18, {
+                BackgroundColor3 = ButtonNormal
+            })
 
-        TweenService:Create(btn, ButtonTween, {
-            BackgroundColor3 = SelectedButton == btn and ButtonPressed or ButtonNormal,
-            Size = originalSize,
-        }):Play()
+            NewTween(stroke, 0.18, {
+                Transparency = 0.35
+            })
 
-        TweenService:Create(stroke, ButtonTween, {
-            Color = SelectedButton == btn and C.RedLight or Color3.fromRGB(75, 65, 82),
-            Transparency = SelectedButton == btn and 0.05 or 0.25,
-        }):Play()
-
-        TweenService:Create(accent, ButtonTween, {
-            BackgroundColor3 = SelectedButton == btn and C.RedLight or C.PurpleLight,
-            Size = UDim2.new(0, 3, 0.6, 0),
-            Position = UDim2.new(0, 0, 0.2, 0),
-        }):Play()
-
-        TweenService:Create(arrow, ButtonTween, {
-            TextColor3 = C.Muted,
-            Position = UDim2.new(1, -32, 0, 0),
-        }):Play()
+            NewTween(arrow, 0.18, {
+                TextColor3 = C.Dim
+            })
+        end
     end)
 
-    btn.MouseButton1Down:Connect(function()
-        TweenService:Create(btn, PressTween, {
-            BackgroundColor3 = ButtonPressed,
-            Size = UDim2.new(1, -8, 0, 43),
-        }):Play()
-    end)
+    btn.MouseButton1Click:Connect(function()
+        if SelectedButton and SelectedButton ~= btn then
+            for _, item in ipairs(ButtonRecords) do
+                if item.Button == SelectedButton then
+                    NewTween(item.Button, 0.22, {
+                        BackgroundColor3 = ButtonNormal
+                    })
 
-    btn.MouseButton1Up:Connect(function()
-        TweenService:Create(btn, PressTween, {
-            BackgroundColor3 = isHovered and ButtonHover or ButtonNormal,
-            Size = originalSize,
-        }):Play()
-    end)
+                    NewTween(item.Stroke, 0.22, {
+                        Color = Color3.fromRGB(76, 48, 62),
+                        Transparency = 0.35
+                    })
 
-    btn.Activated:Connect(function()
-        callback()
+                    NewTween(item.Accent, 0.22, {
+                        BackgroundColor3 = C.Crimson,
+                        Size = UDim2.new(0, 3, 0.6, 0),
+                        Position = UDim2.new(0, 0, 0.2, 0)
+                    })
 
-        if SelectedButton and SelectedButton.Parent then
-            for _, record in ipairs(ButtonRecords) do
-                if record.Button == SelectedButton then
-                    TweenService:Create(record.Stroke, ButtonTween, {
-                        Color = Color3.fromRGB(75, 65, 82),
-                        Transparency = 0.25,
-                    }):Play()
-                    TweenService:Create(record.Accent, ButtonTween, {
-                        BackgroundColor3 = C.PurpleLight,
-                    }):Play()
+                    NewTween(item.Icon, 0.22, {
+                        BackgroundColor3 = C.SurfaceLight
+                    })
+
+                    NewTween(item.IconStroke, 0.22, {
+                        Color = C.CrimsonDark,
+                        Transparency = 0.35
+                    })
+
+                    NewTween(item.IconLabel, 0.22, {
+                        TextColor3 = C.CrimsonBright
+                    })
+
+                    NewTween(item.Label, 0.22, {
+                        TextColor3 = C.White
+                    })
+
+                    NewTween(item.Arrow, 0.22, {
+                        TextColor3 = C.Dim,
+                        Position = UDim2.new(1, -29, 0, 0)
+                    })
+
+                    NewTween(item.Indicator, 0.22, {
+                        BackgroundTransparency = 1,
+                        Size = UDim2.new(0, 5, 0, 5)
+                    })
+
+                    break
                 end
             end
         end
 
         SelectedButton = btn
-
-        TweenService:Create(btn, ButtonTween, {
-            BackgroundColor3 = ButtonPressed,
-        }):Play()
-
-        TweenService:Create(stroke, ButtonTween, {
-            Color = C.RedLight,
-            Transparency = 0.05,
-        }):Play()
-
-        TweenService:Create(accent, ButtonTween, {
-            BackgroundColor3 = C.RedLight,
-        }):Play()
-
-        TweenService:Create(arrow, ButtonTween, {
-            TextColor3 = C.RedLight,
-        }):Play()
+        setSelected(true)
+        callback()
     end)
 
     return btn
 end
+
+--==================================================
+-- CREATE PRESET BUTTONS
+--==================================================
 
 createMenuButton("Daytime", 1, applyDaytime)
 createMenuButton("Sunset", 2, applySunset)
@@ -621,38 +893,61 @@ createMenuButton("Cloudy", 4, applyCloudy)
 createMenuButton("Shore", 5, applyShore)
 createMenuButton("Cinematic", 6, applyCinematic)
 
--- Dragging
-local dragging = false
-local dragInput
-local dragStart
-local startPos
+--==================================================
+-- FOOTER
+--==================================================
 
-local function update(input)
+local Footer = Instance.new("Frame")
+Footer.Parent = MainFrame
+Footer.BackgroundColor3 = C.Surface
+Footer.BackgroundTransparency = 0.2
+Footer.BorderSizePixel = 0
+Footer.Position = UDim2.new(0, 17, 1, -34)
+Footer.Size = UDim2.new(1, -34, 0, 22)
+Footer.ZIndex = 6
+
+Corner(Footer, 7)
+
+local FooterText = CreateLabel(
+    Footer,
+    "FooterText",
+    "PYROVEX GRAPHICS  •  LOCAL PRESETS",
+    UDim2.new(0, 0, 0, 0),
+    UDim2.new(1, 0, 1, 0),
+    Enum.Font.GothamBold,
+    7,
+    C.Dim
+)
+
+FooterText.TextXAlignment = Enum.TextXAlignment.Center
+
+--==================================================
+-- DRAG SYSTEM
+--==================================================
+
+local dragging = false
+local dragInput = nil
+local dragStart = nil
+local startPosition = nil
+
+local function updateDrag(input)
     local delta = input.Position - dragStart
+
     MainFrame.Position = UDim2.new(
-        startPos.X.Scale,
-        startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-        startPos.Y.Offset + delta.Y
+        startPosition.X.Scale,
+        startPosition.X.Offset + delta.X,
+        startPosition.Y.Scale,
+        startPosition.Y.Offset + delta.Y
     )
 end
 
-local DragHandle = Instance.new("Frame")
-DragHandle.Name = "DragHandle"
-DragHandle.Parent = MainFrame
-DragHandle.BackgroundTransparency = 1
-DragHandle.Position = UDim2.new(0, 55, 0, 0)
-DragHandle.Size = UDim2.new(1, -105, 0, 60)
-DragHandle.Active = true
-DragHandle.ZIndex = 12
-
-DragHandle.InputBegan:Connect(function(input)
+MainFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
 
         dragging = true
         dragStart = input.Position
-        startPos = MainFrame.Position
+        startPosition = MainFrame.Position
 
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
@@ -662,7 +957,7 @@ DragHandle.InputBegan:Connect(function(input)
     end
 end)
 
-DragHandle.InputChanged:Connect(function(input)
+MainFrame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement
         or input.UserInputType == Enum.UserInputType.Touch then
         dragInput = input
@@ -671,206 +966,103 @@ end)
 
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
-        update(input)
+        updateDrag(input)
     end
 end)
 
--- Close animation
-local closing = false
+--==================================================
+-- CLOSE BUTTON
+--==================================================
 
-CloseBtn.MouseEnter:Connect(function()
-    TweenService:Create(CloseBtn, ButtonTween, {
-        BackgroundColor3 = C.Red,
-    }):Play()
+local isClosing = false
 
-    TweenService:Create(CloseStroke, ButtonTween, {
-        Color = C.RedLight,
-        Transparency = 0.05,
-    }):Play()
-end)
-
-CloseBtn.MouseLeave:Connect(function()
-    TweenService:Create(CloseBtn, ButtonTween, {
-        BackgroundColor3 = C.Graphite,
-    }):Play()
-
-    TweenService:Create(CloseStroke, ButtonTween, {
-        Color = C.RedLight,
-        Transparency = 0.4,
-    }):Play()
-end)
-
-CloseBtn.Activated:Connect(function()
-    if closing then
+CloseBtn.MouseButton1Click:Connect(function()
+    if isClosing then
         return
     end
 
-    closing = true
+    isClosing = true
 
-    local fadeInfo = TweenInfo.new(
-        0.28,
-        Enum.EasingStyle.Quint,
-        Enum.EasingDirection.In
-    )
-
-    TweenService:Create(MainFrame, fadeInfo, {
+    NewTween(MainFrame, 0.25, {
         BackgroundTransparency = 1,
-        Size = UDim2.new(0, 245, 0, 315),
-        Position = MainFrame.Position + UDim2.new(0, 0, 0, 12),
-    }):Play()
-
-    TweenService:Create(FrameStroke, fadeInfo, {
-        Transparency = 1,
-    }):Play()
+        Size = UDim2.new(0, 250, 0, 350)
+    })
 
     for _, obj in ipairs(MainFrame:GetDescendants()) do
         if obj:IsA("TextLabel") or obj:IsA("TextButton") then
-            TweenService:Create(obj, fadeInfo, {
+            NewTween(obj, 0.2, {
                 TextTransparency = 1,
-                BackgroundTransparency = 1,
-            }):Play()
+                BackgroundTransparency = 1
+            })
+        elseif obj:IsA("Frame") then
+            NewTween(obj, 0.2, {
+                BackgroundTransparency = 1
+            })
         elseif obj:IsA("UIStroke") then
-            TweenService:Create(obj, fadeInfo, {
-                Transparency = 1,
-            }):Play()
-        elseif obj:IsA("Frame") and obj ~= DragHandle then
-            TweenService:Create(obj, fadeInfo, {
-                BackgroundTransparency = 1,
-            }):Play()
+            NewTween(obj, 0.2, {
+                Transparency = 1
+            })
         end
     end
 
-    task.wait(0.31)
-
-    if ScreenGui.Parent then
-        ScreenGui:Destroy()
-    end
+    task.wait(0.27)
+    ScreenGui:Destroy()
 end)
 
--- Opening animation
-MainFrame.Size = UDim2.new(0, 235, 0, 305)
-MainFrame.Position = UDim2.new(0.08, 0, 0.15, 14)
-MainFrame.BackgroundTransparency = 1
-FrameStroke.Transparency = 1
+--==================================================
+-- OPEN ANIMATION
+--==================================================
 
-for _, obj in ipairs(MainFrame:GetDescendants()) do
-    if obj:IsA("TextLabel") or obj:IsA("TextButton") then
-        obj.TextTransparency = 1
-    elseif obj:IsA("UIStroke") then
-        obj.Transparency = 1
-    elseif obj:IsA("Frame") and obj ~= DragHandle then
-        if obj ~= MainFrame then
-            obj.BackgroundTransparency = 1
-        end
+MainFrame.Size = UDim2.new(0, 250, 0, 350)
+MainScale.Scale = 0.85
+
+NewTween(MainFrame, 0.45, {
+    Size = UDim2.new(0, 280, 0, 390)
+}, Enum.EasingStyle.Back)
+
+NewTween(MainScale, 0.45, {
+    Scale = 0.9
+}, Enum.EasingStyle.Back)
+
+--==================================================
+-- DEFAULT PRESET
+--==================================================
+
+task.wait(0.5)
+applyDaytime()
+
+for _, item in ipairs(ButtonRecords) do
+    if item.Button.Name == "DaytimeButton" then
+        SelectedButton = item.Button
+
+        NewTween(item.Button, 0.22, {
+            BackgroundColor3 = ButtonSelected
+        })
+
+        NewTween(item.Stroke, 0.22, {
+            Color = C.CrimsonBright,
+            Transparency = 0.05
+        })
+
+        NewTween(item.Accent, 0.22, {
+            BackgroundColor3 = C.CrimsonBright,
+            Size = UDim2.new(0, 4, 0.75, 0),
+            Position = UDim2.new(0, 0, 0.125, 0)
+        })
+
+        NewTween(item.Icon, 0.22, {
+            BackgroundColor3 = C.CrimsonDark
+        })
+
+        NewTween(item.Label, 0.22, {
+            TextColor3 = C.CrimsonBright
+        })
+
+        NewTween(item.Indicator, 0.22, {
+            BackgroundTransparency = 0,
+            Size = UDim2.new(0, 6, 0, 6)
+        })
+
+        break
     end
 end
-
-local openTween = TweenInfo.new(
-    0.48,
-    Enum.EasingStyle.Back,
-    Enum.EasingDirection.Out
-)
-
-TweenService:Create(MainFrame, openTween, {
-    Size = UDim2.new(0, 270, 0, 350),
-    Position = UDim2.new(0.08, 0, 0.15, 0),
-    BackgroundTransparency = 0.04,
-}):Play()
-
-TweenService:Create(FrameStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
-    Transparency = 0.28,
-}):Play()
-
-for _, obj in ipairs(MainFrame:GetDescendants()) do
-    if obj:IsA("TextLabel") or obj:IsA("TextButton") then
-        TweenService:Create(
-            obj,
-            TweenInfo.new(0.36, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-            {TextTransparency = 0}
-        ):Play()
-
-    elseif obj:IsA("UIStroke") then
-        local targetTransparency = 0.25
-
-        if obj == PLogoStroke then
-            targetTransparency = 0.12
-        elseif obj == LogoTextStroke then
-            targetTransparency = 0.65
-        elseif obj == CloseStroke then
-            targetTransparency = 0.4
-        elseif obj.Parent and obj.Parent:IsA("TextButton") then
-            targetTransparency = 0.25
-        end
-
-        TweenService:Create(
-            obj,
-            TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-            {Transparency = targetTransparency}
-        ):Play()
-
-    elseif obj:IsA("Frame") and obj ~= MainFrame and obj ~= DragHandle then
-        local targetTransparency = 0
-
-        if obj == HeaderLine or obj == OuterGlow then
-            targetTransparency = 0.1
-        end
-
-        TweenService:Create(
-            obj,
-            TweenInfo.new(0.38, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-            {BackgroundTransparency = targetTransparency}
-        ):Play()
-    end
-end
-
--- Animated red-purple accent
-task.spawn(function()
-    while ScreenGui.Parent and not closing do
-        local gradientTween = TweenService:Create(
-            OuterGlowGradient,
-            TweenInfo.new(3.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-            {Rotation = 180}
-        )
-
-        gradientTween:Play()
-        gradientTween.Completed:Wait()
-
-        if not ScreenGui.Parent or closing then
-            break
-        end
-
-        local reverseTween = TweenService:Create(
-            OuterGlowGradient,
-            TweenInfo.new(3.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-            {Rotation = 360}
-        )
-
-        reverseTween:Play()
-        reverseTween.Completed:Wait()
-    end
-end)
-
--- Subtle logo pulse
-task.spawn(function()
-    while ScreenGui.Parent and not closing do
-        TweenService:Create(
-            PLogoStroke,
-            TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-            {Transparency = 0.35}
-        ):Play()
-
-        task.wait(1.1)
-
-        if not ScreenGui.Parent or closing then
-            break
-        end
-
-        TweenService:Create(
-            PLogoStroke,
-            TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
-            {Transparency = 0.12}
-        ):Play()
-
-        task.wait(1.1)
-    end
-end)
