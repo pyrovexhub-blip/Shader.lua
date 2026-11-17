@@ -1,4 +1,3 @@
-
 --==================================================
 -- PYROVEX HUB - ADVANCED TOP LOADING EFFECT
 -- BLUE x RED x BLACK x PURPLE
@@ -7,27 +6,24 @@
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local Workspace = game:GetService("Workspace")
 
 local Player = Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 
 local LogoAsset = "rbxthumb://type=Asset&id=97950138094007&w=420&h=420"
 
-local Old = PlayerGui:FindFirstChild("PyrovexTopLoader")
-if Old then Old:Destroy() end
+local OldLoader = PlayerGui:FindFirstChild("PyrovexTopLoader")
+if OldLoader then
+    OldLoader:Destroy()
+end
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "PyrovexTopLoader"
-ScreenGui.IgnoreGuiInset = true
-ScreenGui.ResetOnSpawn = false
-ScreenGui.DisplayOrder = 999999
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = PlayerGui
-
-local function New(class,props,parent)
+local function New(class, props, parent)
     local object = Instance.new(class)
 
-    for property,value in pairs(props or {}) do
+    for property, value in pairs(props or {}) do
         object[property] = value
     end
 
@@ -35,7 +31,7 @@ local function New(class,props,parent)
     return object
 end
 
-local function Tween(obj,properties,duration,style,direction)
+local function Tween(obj, properties, duration, style, direction)
     local tween = TweenService:Create(
         obj,
         TweenInfo.new(
@@ -50,237 +46,209 @@ local function Tween(obj,properties,duration,style,direction)
     return tween
 end
 
-local Main = New("Frame",{
+--==================================================
+-- LOADER GUI
+--==================================================
+
+local LoaderGui = New("ScreenGui", {
+    Name = "PyrovexTopLoader",
+    IgnoreGuiInset = true,
+    ResetOnSpawn = false,
+    DisplayOrder = 999999,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+}, PlayerGui)
+
+local Main = New("Frame", {
     Name = "LoadingContainer",
-    Size = UDim2.fromOffset(340,62),
-    Position = UDim2.new(0.5,0,0,-85),
-    AnchorPoint = Vector2.new(0.5,0),
-    BackgroundColor3 = Color3.fromRGB(10,12,23),
+    Size = UDim2.fromOffset(340, 62),
+    Position = UDim2.new(0.5, 0, 0, -85),
+    AnchorPoint = Vector2.new(0.5, 0),
+    BackgroundColor3 = Color3.fromRGB(10, 12, 23),
     BorderSizePixel = 0,
     ClipsDescendants = true,
     ZIndex = 10
-},ScreenGui)
+}, LoaderGui)
 
-New("UICorner",{
-    CornerRadius = UDim.new(0,13)
-},Main)
+New("UICorner", {
+    CornerRadius = UDim.new(0, 13)
+}, Main)
 
-local MainStroke = New("UIStroke",{
-    Color = Color3.fromRGB(90,105,210),
+local MainStroke = New("UIStroke", {
+    Color = Color3.fromRGB(90, 105, 210),
     Thickness = 1.3,
     Transparency = 0.1
-},Main)
+}, Main)
 
-New("UIGradient",{
+New("UIGradient", {
     Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0,Color3.fromRGB(12,18,35)),
-        ColorSequenceKeypoint.new(0.5,Color3.fromRGB(15,12,28)),
-        ColorSequenceKeypoint.new(1,Color3.fromRGB(28,12,25))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 18, 35)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(15, 12, 28)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(28, 12, 25))
     }),
     Rotation = 15
-},Main)
+}, Main)
 
--- OUTER GLOW
-
-local Glow = New("Frame",{
+local Glow = New("Frame", {
     Name = "Glow",
-    Size = UDim2.new(1,-12,0,2),
-    Position = UDim2.fromOffset(6,0),
-    BackgroundColor3 = Color3.fromRGB(80,120,255),
+    Size = UDim2.new(1, -12, 0, 2),
+    Position = UDim2.fromOffset(6, 0),
+    BackgroundColor3 = Color3.fromRGB(80, 120, 255),
     BorderSizePixel = 0,
     ZIndex = 12
-},Main)
+}, Main)
 
-New("UICorner",{
-    CornerRadius = UDim.new(1,0)
-},Glow)
+New("UICorner", {
+    CornerRadius = UDim.new(1, 0)
+}, Glow)
 
-New("UIGradient",{
+New("UIGradient", {
     Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0,Color3.fromRGB(0,130,255)),
-        ColorSequenceKeypoint.new(0.35,Color3.fromRGB(120,65,255)),
-        ColorSequenceKeypoint.new(0.7,Color3.fromRGB(230,45,100)),
-        ColorSequenceKeypoint.new(1,Color3.fromRGB(255,65,65))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 130, 255)),
+        ColorSequenceKeypoint.new(0.35, Color3.fromRGB(120, 65, 255)),
+        ColorSequenceKeypoint.new(0.7, Color3.fromRGB(230, 45, 100)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 65, 65))
     })
-},Glow)
+}, Glow)
 
--- SETTINGS EMOJI
-
-local Settings = New("TextLabel",{
-    Name = "SettingsIcon",
-    Size = UDim2.fromOffset(32,32),
-    Position = UDim2.fromOffset(11,10),
+local LoaderLogo = New("ImageLabel", {
+    Name = "Logo",
+    Size = UDim2.fromOffset(34, 34),
+    Position = UDim2.fromOffset(10, 9),
     BackgroundTransparency = 1,
-    Text = "⚙️",
-    TextSize = 24,
-    Font = Enum.Font.GothamBold,
-    TextColor3 = Color3.fromRGB(255,255,255),
+    Image = LogoAsset,
+    ScaleType = Enum.ScaleType.Fit,
     ZIndex = 15
-},Main)
+}, Main)
 
-task.spawn(function()
-    while ScreenGui.Parent and Settings.Parent do
-        local rotate = Tween(
-            Settings,
-            {Rotation = Settings.Rotation + 360},
-            1.35,
-            Enum.EasingStyle.Linear
-        )
-
-        rotate.Completed:Wait()
-    end
-end)
-
--- TITLE
-
-local Title = New("TextLabel",{
+local Title = New("TextLabel", {
     Name = "Title",
-    Position = UDim2.fromOffset(51,8),
-    Size = UDim2.new(1,-115,0,17),
+    Position = UDim2.fromOffset(51, 8),
+    Size = UDim2.new(1, -115, 0, 17),
     BackgroundTransparency = 1,
     Text = "PYROVEX HUB",
-    TextColor3 = Color3.fromRGB(245,248,255),
+    TextColor3 = Color3.fromRGB(245, 248, 255),
     TextSize = 11,
     TextXAlignment = Enum.TextXAlignment.Left,
     Font = Enum.Font.GothamBlack,
     ZIndex = 15
-},Main)
+}, Main)
 
--- STATUS
-
-local Status = New("TextLabel",{
+local Status = New("TextLabel", {
     Name = "Status",
-    Position = UDim2.fromOffset(51,25),
-    Size = UDim2.new(1,-105,0,15),
+    Position = UDim2.fromOffset(51, 25),
+    Size = UDim2.new(1, -105, 0, 15),
     BackgroundTransparency = 1,
     Text = "Initializing loader...",
-    TextColor3 = Color3.fromRGB(150,165,195),
+    TextColor3 = Color3.fromRGB(150, 165, 195),
     TextSize = 8,
     TextXAlignment = Enum.TextXAlignment.Left,
     Font = Enum.Font.GothamMedium,
     ZIndex = 15
-},Main)
+}, Main)
 
--- PERCENTAGE
-
-local Percentage = New("TextLabel",{
+local Percentage = New("TextLabel", {
     Name = "Percentage",
-    Position = UDim2.new(1,-54,0,24),
-    Size = UDim2.fromOffset(43,16),
+    Position = UDim2.new(1, -54, 0, 24),
+    Size = UDim2.fromOffset(43, 16),
     BackgroundTransparency = 1,
     Text = "0%",
-    TextColor3 = Color3.fromRGB(150,190,255),
+    TextColor3 = Color3.fromRGB(150, 190, 255),
     TextSize = 9,
     TextXAlignment = Enum.TextXAlignment.Right,
     Font = Enum.Font.GothamBold,
     ZIndex = 15
-},Main)
+}, Main)
 
--- PROGRESS BACKGROUND
-
-local BarBG = New("Frame",{
+local BarBG = New("Frame", {
     Name = "ProgressBackground",
-    Size = UDim2.new(1,-22,0,5),
-    Position = UDim2.fromOffset(11,48),
-    BackgroundColor3 = Color3.fromRGB(32,35,53),
+    Size = UDim2.new(1, -22, 0, 5),
+    Position = UDim2.fromOffset(11, 48),
+    BackgroundColor3 = Color3.fromRGB(32, 35, 53),
     BorderSizePixel = 0,
     ClipsDescendants = true,
     ZIndex = 15
-},Main)
+}, Main)
 
-New("UICorner",{
-    CornerRadius = UDim.new(1,0)
-},BarBG)
+New("UICorner", {
+    CornerRadius = UDim.new(1, 0)
+}, BarBG)
 
--- PROGRESS BAR
-
-local Bar = New("Frame",{
+local Bar = New("Frame", {
     Name = "ProgressBar",
-    Size = UDim2.new(0,0,1,0),
-    BackgroundColor3 = Color3.fromRGB(50,130,255),
+    Size = UDim2.new(0, 0, 1, 0),
+    BackgroundColor3 = Color3.fromRGB(50, 130, 255),
     BorderSizePixel = 0,
     ZIndex = 16
-},BarBG)
+}, BarBG)
 
-New("UICorner",{
-    CornerRadius = UDim.new(1,0)
-},Bar)
+New("UICorner", {
+    CornerRadius = UDim.new(1, 0)
+}, Bar)
 
-local BarGradient = New("UIGradient",{
+New("UIGradient", {
     Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0,Color3.fromRGB(0,145,255)),
-        ColorSequenceKeypoint.new(0.35,Color3.fromRGB(100,80,255)),
-        ColorSequenceKeypoint.new(0.7,Color3.fromRGB(190,55,160)),
-        ColorSequenceKeypoint.new(1,Color3.fromRGB(255,55,70))
-    }),
-    Rotation = 0
-},Bar)
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 145, 255)),
+        ColorSequenceKeypoint.new(0.35, Color3.fromRGB(100, 80, 255)),
+        ColorSequenceKeypoint.new(0.7, Color3.fromRGB(190, 55, 160)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 55, 70))
+    })
+}, Bar)
 
--- MOVING SHINE
-
-local Shine = New("Frame",{
+local Shine = New("Frame", {
     Name = "ProgressShine",
-    Size = UDim2.new(0,45,1,0),
-    Position = UDim2.new(0,0,0,0),
-    BackgroundColor3 = Color3.fromRGB(255,255,255),
+    Size = UDim2.new(0, 45, 1, 0),
+    Position = UDim2.new(0, -45, 0, 0),
+    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
     BackgroundTransparency = 0.55,
     BorderSizePixel = 0,
     ZIndex = 17
-},Bar)
+}, Bar)
 
-New("UICorner",{
-    CornerRadius = UDim.new(1,0)
-},Shine)
+New("UICorner", {
+    CornerRadius = UDim.new(1, 0)
+}, Shine)
 
-New("UIGradient",{
+New("UIGradient", {
     Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0,1),
-        NumberSequenceKeypoint.new(0.5,0),
-        NumberSequenceKeypoint.new(1,1)
+        NumberSequenceKeypoint.new(0, 1),
+        NumberSequenceKeypoint.new(0.5, 0),
+        NumberSequenceKeypoint.new(1, 1)
     })
-},Shine)
-
--- LOADING ENTRANCE
+}, Shine)
 
 Tween(
     Main,
-    {Position = UDim2.new(0.5,0,0,12)},
+    {Position = UDim2.new(0.5, 0, 0, 12)},
     0.75,
-    Enum.EasingStyle.Quint,
-    Enum.EasingDirection.Out
+    Enum.EasingStyle.Quint
 )
 
--- BORDER ANIMATION
-
 task.spawn(function()
-    while ScreenGui.Parent do
-        Tween(MainStroke,{
+    while LoaderGui.Parent do
+        Tween(MainStroke, {
             Transparency = 0.55,
-            Color = Color3.fromRGB(180,65,160)
-        },0.8)
+            Color = Color3.fromRGB(180, 65, 160)
+        }, 0.8)
 
         task.wait(0.8)
+        if not LoaderGui.Parent then break end
 
-        if not ScreenGui.Parent then break end
-
-        Tween(MainStroke,{
+        Tween(MainStroke, {
             Transparency = 0.1,
-            Color = Color3.fromRGB(70,145,255)
-        },0.8)
+            Color = Color3.fromRGB(70, 145, 255)
+        }, 0.8)
 
         task.wait(0.8)
     end
 end)
 
--- SHINE ANIMATION
-
 task.spawn(function()
-    while ScreenGui.Parent and Shine.Parent do
-        Shine.Position = UDim2.new(0,-45,0,0)
+    while LoaderGui.Parent and Shine.Parent do
+        Shine.Position = UDim2.new(0, -45, 0, 0)
 
         local shineTween = Tween(
             Shine,
-            {Position = UDim2.new(1,0,0,0)},
+            {Position = UDim2.new(1, 0, 0, 0)},
             0.75,
             Enum.EasingStyle.Linear
         )
@@ -290,112 +258,95 @@ task.spawn(function()
     end
 end)
 
--- LOADING STATUS
-
 local LoadingMessages = {
     {Time = 0, Text = "Initializing Pyrovex Hub..."},
     {Time = 1, Text = "Preparing loader interface..."},
-    {Time = 2, Text = "Loading script collection..."},
+    {Time = 2, Text = "Loading shader presets..."},
     {Time = 3, Text = "Setting up components..."},
     {Time = 4, Text = "Almost ready..."}
 }
 
-for _,message in ipairs(LoadingMessages) do
-    task.delay(message.Time,function()
-        if not ScreenGui.Parent then return end
+for _, message in ipairs(LoadingMessages) do
+    task.delay(message.Time, function()
+        if not LoaderGui.Parent then return end
 
-        Tween(Status,{
+        Tween(Status, {
             TextTransparency = 1
-        },0.15)
+        }, 0.15)
 
         task.wait(0.15)
-
-        if not ScreenGui.Parent then return end
+        if not LoaderGui.Parent then return end
 
         Status.Text = message.Text
 
-        Tween(Status,{
+        Tween(Status, {
             TextTransparency = 0
-        },0.2)
+        }, 0.2)
     end)
 end
-
--- EXACT 5 SECOND PROGRESS
 
 local StartTime = os.clock()
 local Duration = 5
 
-local Progress = Tween(
+Tween(
     Bar,
-    {Size = UDim2.new(1,0,1,0)},
+    {Size = UDim2.new(1, 0, 1, 0)},
     Duration,
     Enum.EasingStyle.Linear
 )
 
-Progress:Play()
-
 while os.clock() - StartTime < Duration do
-    if not ScreenGui.Parent then return end
+    if not LoaderGui.Parent then return end
 
     local elapsed = os.clock() - StartTime
-    local percent = math.clamp(math.floor((elapsed / Duration) * 100),0,100)
+    local percent = math.clamp(math.floor((elapsed / Duration) * 100), 0, 100)
 
-    Percentage.Text = percent.."%"
-
+    Percentage.Text = percent .. "%"
     task.wait(0.04)
 end
 
 Percentage.Text = "100%"
 Status.Text = "Pyrovex Hub is ready!"
 
--- FINISH EFFECT
-
-Tween(MainStroke,{
-    Color = Color3.fromRGB(80,220,160),
+Tween(MainStroke, {
+    Color = Color3.fromRGB(80, 220, 160),
     Transparency = 0
-},0.2)
+}, 0.2)
 
-Tween(Bar,{
-    BackgroundColor3 = Color3.fromRGB(60,220,150)
-},0.2)
+Tween(Bar, {
+    BackgroundColor3 = Color3.fromRGB(60, 220, 150)
+}, 0.2)
 
 task.wait(0.25)
 
--- LOADING EXIT
-
-Tween(Main,{
-    Position = UDim2.new(0.5,0,0,-85),
+Tween(Main, {
+    Position = UDim2.new(0.5, 0, 0, -85),
     BackgroundTransparency = 1
-},0.65,Enum.EasingStyle.Quint,Enum.EasingDirection.In)
+}, 0.65, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 
-Tween(Settings,{TextTransparency = 1},0.35)
-Tween(Title,{TextTransparency = 1},0.35)
-Tween(Status,{TextTransparency = 1},0.35)
-Tween(Percentage,{TextTransparency = 1},0.35)
-Tween(BarBG,{BackgroundTransparency = 1},0.35)
-Tween(Glow,{BackgroundTransparency = 1},0.35)
+Tween(LoaderLogo, {ImageTransparency = 1}, 0.35)
+Tween(Title, {TextTransparency = 1}, 0.35)
+Tween(Status, {TextTransparency = 1}, 0.35)
+Tween(Percentage, {TextTransparency = 1}, 0.35)
+Tween(BarBG, {BackgroundTransparency = 1}, 0.35)
+Tween(Glow, {BackgroundTransparency = 1}, 0.35)
 
 task.wait(0.7)
+LoaderGui:Destroy()
 
-if ScreenGui then
-    ScreenGui:Destroy()
-end
+--==================================================
+-- SHADER GUI SETUP
+--==================================================
 
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
-local Workspace = game:GetService("Workspace")
+local TargetParent = (gethui and gethui()) or Player:WaitForChild("PlayerGui")
 
-local LocalPlayer = Players.LocalPlayer
-local TargetParent = (gethui and gethui()) or LocalPlayer:WaitForChild("PlayerGui")
-
-if TargetParent:FindFirstChild("PyrovexShaderV2Canvas") then
-    TargetParent.PyrovexShaderV2Canvas:Destroy()
+local OldShader = TargetParent:FindFirstChild("PyrovexShaderV2Canvas")
+if OldShader then
+    OldShader:Destroy()
 end
 
 --==================================================
--- LIGHTING FUNCTIONS
+-- ORIGINAL LIGHTING FUNCTIONS
 --==================================================
 
 local function clearEffects()
@@ -571,6 +522,192 @@ local function applyCinematic()
 end
 
 --==================================================
+-- NEW SHADER FEATURES
+--==================================================
+
+local function applyUltraGraphics()
+    clearEffects()
+
+    Lighting.ClockTime = 14
+    Lighting.Brightness = 3
+    Lighting.GlobalShadows = true
+    Lighting.ShadowSoftness = 0
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
+    Lighting.Ambient = Color3.fromRGB(100, 100, 115)
+    Lighting.OutdoorAmbient = Color3.fromRGB(180, 185, 200)
+
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
+    cc.Contrast = 0.25
+    cc.Saturation = 0.3
+    cc.Brightness = 0.02
+
+    local bloom = Instance.new("BloomEffect", Lighting)
+    bloom.Intensity = 0.65
+    bloom.Size = 24
+    bloom.Threshold = 1
+
+    local rays = Instance.new("SunRaysEffect", Lighting)
+    rays.Intensity = 0.12
+    rays.Spread = 0.7
+
+    local atm = Instance.new("Atmosphere", Lighting)
+    atm.Density = 0.22
+    atm.Haze = 0.5
+    atm.Glare = 0.15
+end
+
+local function applyVibrant()
+    clearEffects()
+
+    Lighting.ClockTime = 13.5
+    Lighting.Brightness = 3.2
+    Lighting.GlobalShadows = true
+    Lighting.ShadowSoftness = 0.15
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
+    Lighting.Ambient = Color3.fromRGB(100, 75, 120)
+    Lighting.OutdoorAmbient = Color3.fromRGB(190, 165, 210)
+
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
+    cc.Contrast = 0.3
+    cc.Saturation = 0.8
+    cc.TintColor = Color3.fromRGB(255, 230, 250)
+
+    local bloom = Instance.new("BloomEffect", Lighting)
+    bloom.Intensity = 0.8
+    bloom.Size = 28
+    bloom.Threshold = 0.9
+
+    local rays = Instance.new("SunRaysEffect", Lighting)
+    rays.Intensity = 0.2
+    rays.Spread = 0.8
+end
+
+local function applyArctic()
+    clearEffects()
+
+    Lighting.ClockTime = 12
+    Lighting.Brightness = 2.8
+    Lighting.GlobalShadows = true
+    Lighting.ShadowSoftness = 0.25
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
+    Lighting.Ambient = Color3.fromRGB(115, 145, 175)
+    Lighting.OutdoorAmbient = Color3.fromRGB(190, 215, 240)
+
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
+    cc.Contrast = 0.2
+    cc.Saturation = 0.15
+    cc.TintColor = Color3.fromRGB(195, 225, 255)
+
+    local bloom = Instance.new("BloomEffect", Lighting)
+    bloom.Intensity = 0.7
+    bloom.Size = 30
+
+    local atm = Instance.new("Atmosphere", Lighting)
+    atm.Density = 0.3
+    atm.Color = Color3.fromRGB(190, 220, 255)
+    atm.Decay = Color3.fromRGB(100, 145, 190)
+    atm.Haze = 1.2
+end
+
+local function applyDeepOcean()
+    clearEffects()
+
+    Lighting.ClockTime = 18.5
+    Lighting.Brightness = 1.8
+    Lighting.GlobalShadows = true
+    Lighting.ShadowSoftness = 0.35
+    Lighting.EnvironmentDiffuseScale = 0.8
+    Lighting.EnvironmentSpecularScale = 1
+    Lighting.Ambient = Color3.fromRGB(10, 35, 65)
+    Lighting.OutdoorAmbient = Color3.fromRGB(20, 65, 100)
+
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
+    cc.Contrast = 0.35
+    cc.Saturation = 0.35
+    cc.TintColor = Color3.fromRGB(120, 190, 230)
+
+    local bloom = Instance.new("BloomEffect", Lighting)
+    bloom.Intensity = 0.8
+    bloom.Size = 35
+
+    local atm = Instance.new("Atmosphere", Lighting)
+    atm.Density = 0.45
+    atm.Color = Color3.fromRGB(30, 100, 150)
+    atm.Decay = Color3.fromRGB(5, 25, 65)
+    atm.Haze = 2
+end
+
+local function applyRealistic()
+    clearEffects()
+
+    Lighting.ClockTime = 14
+    Lighting.Brightness = 2.5
+    Lighting.GlobalShadows = true
+    Lighting.ShadowSoftness = 0.3
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
+    Lighting.Ambient = Color3.fromRGB(105, 105, 105)
+    Lighting.OutdoorAmbient = Color3.fromRGB(170, 170, 170)
+
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
+    cc.Contrast = 0.18
+    cc.Saturation = 0.12
+    cc.Brightness = 0.01
+    cc.TintColor = Color3.fromRGB(255, 248, 235)
+
+    local bloom = Instance.new("BloomEffect", Lighting)
+    bloom.Intensity = 0.35
+    bloom.Size = 20
+    bloom.Threshold = 1.2
+
+    local atm = Instance.new("Atmosphere", Lighting)
+    atm.Density = 0.25
+    atm.Offset = 0.1
+    atm.Color = Color3.fromRGB(210, 215, 225)
+    atm.Decay = Color3.fromRGB(110, 115, 125)
+    atm.Glare = 0.1
+    atm.Haze = 0.7
+end
+
+local function applyDreamscape()
+    clearEffects()
+
+    Lighting.ClockTime = 17
+    Lighting.Brightness = 3
+    Lighting.GlobalShadows = true
+    Lighting.ShadowSoftness = 0.4
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
+    Lighting.Ambient = Color3.fromRGB(90, 65, 115)
+    Lighting.OutdoorAmbient = Color3.fromRGB(165, 125, 190)
+
+    local cc = Instance.new("ColorCorrectionEffect", Lighting)
+    cc.Contrast = 0.22
+    cc.Saturation = 0.45
+    cc.Brightness = 0.03
+    cc.TintColor = Color3.fromRGB(235, 205, 255)
+
+    local bloom = Instance.new("BloomEffect", Lighting)
+    bloom.Intensity = 1
+    bloom.Size = 40
+    bloom.Threshold = 0.8
+
+    local rays = Instance.new("SunRaysEffect", Lighting)
+    rays.Intensity = 0.25
+    rays.Spread = 0.85
+
+    local atm = Instance.new("Atmosphere", Lighting)
+    atm.Density = 0.32
+    atm.Color = Color3.fromRGB(190, 150, 220)
+    atm.Decay = Color3.fromRGB(75, 45, 110)
+    atm.Glare = 0.5
+    atm.Haze = 1.5
+end
+
+--==================================================
 -- CRIMSON UI THEME
 --==================================================
 
@@ -590,7 +727,7 @@ local C = {
     Dim = Color3.fromRGB(95, 77, 88),
 
     Black = Color3.fromRGB(8, 7, 11),
-    Green = Color3.fromRGB(105, 220, 155),
+    Green = Color3.fromRGB(105, 220, 155)
 }
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -687,7 +824,7 @@ Corner(MainFrame, 17)
 Gradient(MainFrame, {
     ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 17, 29)),
     ColorSequenceKeypoint.new(0.45, Color3.fromRGB(17, 13, 21)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(31, 11, 20)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(31, 11, 20))
 }, 135)
 
 Stroke(MainFrame, C.CrimsonLight, 1.4, 0.2)
@@ -708,7 +845,7 @@ Gradient(Glow, {
     ColorSequenceKeypoint.new(0, C.CrimsonDark),
     ColorSequenceKeypoint.new(0.3, C.CrimsonBright),
     ColorSequenceKeypoint.new(0.7, C.CrimsonLight),
-    ColorSequenceKeypoint.new(1, C.CrimsonDark),
+    ColorSequenceKeypoint.new(1, C.CrimsonDark)
 }, 0)
 
 local BottomAccent = Instance.new("Frame")
@@ -737,22 +874,18 @@ Stroke(LogoBox, C.CrimsonBright, 1.3, 0.2)
 
 Gradient(LogoBox, {
     ColorSequenceKeypoint.new(0, Color3.fromRGB(130, 23, 52)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 12, 27)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 12, 27))
 }, 45)
 
-local Logo = CreateLabel(
-    LogoBox,
-    "Logo",
-    "P",
-    UDim2.new(0, 0, 0, 0),
-    UDim2.new(1, 0, 1, 0),
-    Enum.Font.GothamBlack,
-    27,
-    C.White
-)
-
-Logo.TextXAlignment = Enum.TextXAlignment.Center
-Logo.TextYAlignment = Enum.TextYAlignment.Center
+local Logo = Instance.new("ImageLabel")
+Logo.Name = "Logo"
+Logo.Parent = LogoBox
+Logo.BackgroundTransparency = 1
+Logo.Size = UDim2.new(1, -6, 1, -6)
+Logo.Position = UDim2.new(0, 3, 0, 3)
+Logo.Image = LogoAsset
+Logo.ScaleType = Enum.ScaleType.Fit
+Logo.ZIndex = 12
 
 CreateLabel(
     MainFrame,
@@ -929,7 +1062,7 @@ UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 9)
 
 --==================================================
--- BUTTON SYSTEM
+-- BUTTON SYSTEM - FIXED SELECTION
 --==================================================
 
 local ButtonNormal = Color3.fromRGB(29, 21, 29)
@@ -938,6 +1071,68 @@ local ButtonSelected = Color3.fromRGB(72, 23, 42)
 
 local SelectedButton = nil
 local ButtonRecords = {}
+
+local PresetInfo = {
+    Daytime = {
+        Icon = "☀️",
+        Description = "Natural daylight atmosphere"
+    },
+
+    Sunset = {
+        Icon = "🌅",
+        Description = "Warm crimson sunset tones"
+    },
+
+    Night = {
+        Icon = "🌙",
+        Description = "Deep midnight atmosphere"
+    },
+
+    Cloudy = {
+        Icon = "☁️",
+        Description = "Soft overcast environment"
+    },
+
+    Shore = {
+        Icon = "🌊",
+        Description = "Golden coastal atmosphere"
+    },
+
+    Cinematic = {
+        Icon = "🎥",
+        Description = "Enhanced cinematic visuals"
+    },
+
+    ["Ultra Graphics"] = {
+        Icon = "💎",
+        Description = "Enhanced lighting and clarity"
+    },
+
+    Vibrant = {
+        Icon = "🎨",
+        Description = "Rich and vivid color tones"
+    },
+
+    Arctic = {
+        Icon = "❄️",
+        Description = "Cool blue winter atmosphere"
+    },
+
+    ["Deep Ocean"] = {
+        Icon = "🐬",
+        Description = "Dark underwater color mood"
+    },
+
+    Realistic = {
+        Icon = "📷",
+        Description = "Balanced natural color grading"
+    },
+
+    Dreamscape = {
+        Icon = "✨",
+        Description = "Soft fantasy-inspired atmosphere"
+    }
+}
 
 local function createMenuButton(text, order, callback)
     local btn = Instance.new("TextButton")
@@ -966,7 +1161,7 @@ local function createMenuButton(text, order, callback)
     local gradient = Gradient(btn, {
         ColorSequenceKeypoint.new(0, Color3.fromRGB(43, 28, 39)),
         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(29, 21, 30)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(44, 22, 34)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(44, 22, 34))
     }, 15)
 
     local accent = Instance.new("Frame")
@@ -992,36 +1187,24 @@ local function createMenuButton(text, order, callback)
 
     local iconStroke = Stroke(iconBox, C.CrimsonDark, 1, 0.35)
 
-    local icons = {
-        Daytime = "☀",
-        Sunset = "◉",
-        Night = "🌑",
-        Cloudy = "☁",
-        Shore = "≈",
-        Cinematic = "🎞️",
+    local info = PresetInfo[text] or {
+        Icon = "✨",
+        Description = "Visual lighting preset"
     }
 
     local iconLabel = CreateLabel(
         iconBox,
         "Icon",
-        icons[text] or "✦",
-        UDim2.new(0, 0, 0, 0),
-        UDim2.new(1, 0, 1, 0),
-        Enum.Font.GothamBold,
-        18,
+        info.Icon,
+        UDim2.new(0, 1, 0, 0),
+        UDim2.new(1, -2, 1, 0),
+        Enum.Font.Gotham,
+        17,
         C.CrimsonBright
     )
 
     iconLabel.TextXAlignment = Enum.TextXAlignment.Center
-
-    local descriptions = {
-        Daytime = "Natural daylight atmosphere",
-        Sunset = "Warm crimson sunset tones",
-        Night = "Deep midnight atmosphere",
-        Cloudy = "Soft overcast environment",
-        Shore = "Golden coastal atmosphere",
-        Cinematic = "Enhanced cinematic visuals",
-    }
+    iconLabel.TextYAlignment = Enum.TextYAlignment.Center
 
     local label = CreateLabel(
         btn,
@@ -1037,7 +1220,7 @@ local function createMenuButton(text, order, callback)
     local sublabel = CreateLabel(
         btn,
         "Description",
-        descriptions[text] or "Visual lighting preset",
+        info.Description,
         UDim2.new(0, 51, 0, 27),
         UDim2.new(1, -90, 0, 15),
         Enum.Font.GothamMedium,
@@ -1081,11 +1264,12 @@ local function createMenuButton(text, order, callback)
         IconStroke = iconStroke,
         IconLabel = iconLabel,
         Indicator = indicator,
-        Gradient = gradient,
+        Gradient = gradient
     }
 
     table.insert(ButtonRecords, record)
 
+    -- Each button owns its own selection function.
     local function setSelected(state)
         if state then
             NewTween(btn, 0.22, {
@@ -1113,7 +1297,7 @@ local function createMenuButton(text, order, callback)
             })
 
             NewTween(iconLabel, 0.22, {
-                              TextColor3 = C.White
+                TextColor3 = C.White
             })
 
             NewTween(label, 0.22, {
@@ -1174,6 +1358,9 @@ local function createMenuButton(text, order, callback)
         end
     end
 
+    -- Store the correct function inside its own record.
+    record.SetSelected = setSelected
+
     btn.MouseEnter:Connect(function()
         if SelectedButton ~= btn then
             NewTween(btn, 0.18, {
@@ -1207,58 +1394,20 @@ local function createMenuButton(text, order, callback)
     end)
 
     btn.MouseButton1Click:Connect(function()
+        -- Remove the previous button's highlight.
         if SelectedButton and SelectedButton ~= btn then
             for _, item in ipairs(ButtonRecords) do
                 if item.Button == SelectedButton then
-                    NewTween(item.Button, 0.22, {
-                        BackgroundColor3 = ButtonNormal
-                    })
-
-                    NewTween(item.Stroke, 0.22, {
-                        Color = Color3.fromRGB(76, 48, 62),
-                        Transparency = 0.35
-                    })
-
-                    NewTween(item.Accent, 0.22, {
-                        BackgroundColor3 = C.Crimson,
-                        Size = UDim2.new(0, 3, 0.6, 0),
-                        Position = UDim2.new(0, 0, 0.2, 0)
-                    })
-
-                    NewTween(item.Icon, 0.22, {
-                        BackgroundColor3 = C.SurfaceLight
-                    })
-
-                    NewTween(item.IconStroke, 0.22, {
-                        Color = C.CrimsonDark,
-                        Transparency = 0.35
-                    })
-
-                    NewTween(item.IconLabel, 0.22, {
-                        TextColor3 = C.CrimsonBright
-                    })
-
-                    NewTween(item.Label, 0.22, {
-                        TextColor3 = C.White
-                    })
-
-                    NewTween(item.Arrow, 0.22, {
-                        TextColor3 = C.Dim,
-                        Position = UDim2.new(1, -29, 0, 0)
-                    })
-
-                    NewTween(item.Indicator, 0.22, {
-                        BackgroundTransparency = 1,
-                        Size = UDim2.new(0, 5, 0, 5)
-                    })
-
+                    item.SetSelected(false)
                     break
                 end
             end
         end
 
+        -- Set the newly clicked button as selected.
         SelectedButton = btn
         setSelected(true)
+
         callback()
     end)
 
@@ -1266,7 +1415,7 @@ local function createMenuButton(text, order, callback)
 end
 
 --==================================================
--- CREATE PRESET BUTTONS
+-- CREATE ALL 12 PRESET BUTTONS
 --==================================================
 
 createMenuButton("Daytime", 1, applyDaytime)
@@ -1275,6 +1424,13 @@ createMenuButton("Night", 3, applyNight)
 createMenuButton("Cloudy", 4, applyCloudy)
 createMenuButton("Shore", 5, applyShore)
 createMenuButton("Cinematic", 6, applyCinematic)
+
+createMenuButton("Ultra Graphics", 7, applyUltraGraphics)
+createMenuButton("Vibrant", 8, applyVibrant)
+createMenuButton("Arctic", 9, applyArctic)
+createMenuButton("Deep Ocean", 10, applyDeepOcean)
+createMenuButton("Realistic", 11, applyRealistic)
+createMenuButton("Dreamscape", 12, applyDreamscape)
 
 --==================================================
 -- FOOTER
@@ -1294,7 +1450,7 @@ Corner(Footer, 7)
 local FooterText = CreateLabel(
     Footer,
     "FooterText",
-    "PYROVEX GRAPHICS  •  LOCAL PRESETS",
+    "PYROVEX GRAPHICS  •  12 LOCAL PRESETS",
     UDim2.new(0, 0, 0, 0),
     UDim2.new(1, 0, 1, 0),
     Enum.Font.GothamBold,
@@ -1377,6 +1533,11 @@ CloseBtn.MouseButton1Click:Connect(function()
                 TextTransparency = 1,
                 BackgroundTransparency = 1
             })
+        elseif obj:IsA("ImageLabel") then
+            NewTween(obj, 0.2, {
+                ImageTransparency = 1,
+                BackgroundTransparency = 1
+            })
         elseif obj:IsA("Frame") then
             NewTween(obj, 0.2, {
                 BackgroundTransparency = 1
@@ -1412,40 +1573,13 @@ NewTween(MainScale, 0.45, {
 --==================================================
 
 task.wait(0.5)
+
 applyDaytime()
 
 for _, item in ipairs(ButtonRecords) do
     if item.Button.Name == "DaytimeButton" then
         SelectedButton = item.Button
-
-        NewTween(item.Button, 0.22, {
-            BackgroundColor3 = ButtonSelected
-        })
-
-        NewTween(item.Stroke, 0.22, {
-            Color = C.CrimsonBright,
-            Transparency = 0.05
-        })
-
-        NewTween(item.Accent, 0.22, {
-            BackgroundColor3 = C.CrimsonBright,
-            Size = UDim2.new(0, 4, 0.75, 0),
-            Position = UDim2.new(0, 0, 0.125, 0)
-        })
-
-        NewTween(item.Icon, 0.22, {
-            BackgroundColor3 = C.CrimsonDark
-        })
-
-        NewTween(item.Label, 0.22, {
-            TextColor3 = C.CrimsonBright
-        })
-
-        NewTween(item.Indicator, 0.22, {
-            BackgroundTransparency = 0,
-            Size = UDim2.new(0, 6, 0, 6)
-        })
-
+        item.SetSelected(true)
         break
     end
 end
